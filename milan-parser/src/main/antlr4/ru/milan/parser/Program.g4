@@ -1,8 +1,6 @@
 grammar Program;
 
-program: 'BEGIN' body+ 'END';
-
-body: statement*;
+program: 'BEGIN' statement+ 'END';
 
 statement: assignment | output | loop | conditional | switch_statement ;
 
@@ -24,7 +22,7 @@ EXPR: SIMPLE_EXPR WS? (('<'|'>'|'='|'<='|'>='|'<>'|'!=') SIMPLE_EXPR)*;
 SIMPLE_EXPR: TERM (('+'|'-') TERM)*;
 
 TERM: FACTOR (('*'|'/'|'%') FACTOR)*
-    | FACTOR '++';
+    | FACTOR '++' ';' ;
 
 FACTOR: ID
       | INT
