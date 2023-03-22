@@ -11,4 +11,76 @@
 // We have to implement Runtime.
 grammar Program;
 
-tokens { TAB, UNTAB }
+    BEGIN : 'BEGIN' ;
+
+    DO : 'DO' ;
+
+    ELSE : 'ELSE' ;
+
+    END : 'END' ;
+
+    ENDDO : 'ENDDO' ;
+
+    ENDIF : 'ENDIF' ;
+
+    IF : 'IF' ;
+
+    OUTPUT : 'OUTPUT' ;
+
+    READ : 'READ' ;
+
+    THEN : 'THEN' ;
+
+    WHILE : 'WHILE' ;
+
+    SWITCH : 'SWITCH' ;
+
+    CASE : 'CASE' ;
+
+    DEFAULT : 'DEFAULT' ;
+
+    NOT_EQUAL_SIGN : LESSER_SIGN + GREATER_SIGN ;
+
+    GREATER_EQUALS : GREATER_SIGN + EQUALITY_SIGN ;
+
+    LESSER_EQUALS : LESSER_SIGN + EQUALITY_SIGN ;
+
+    INCREMENT : PLUS + PLUS ;
+
+    ASSIGN : ':=' ;
+
+    MULTIPLIER_SIGN : '*' ;
+
+    DIVIDER_SIGN : '/' ;
+
+    EQUALITY_SIGN : '=' ;
+
+    GREATER_SIGN : '>' ;
+
+    LESSER_SIGN : '<' ;
+
+    PLUS : '+' ;
+
+    MINUS : '-' ;
+
+    L_CURL_BRACKET : '{' ;
+
+    R_CURL_BRACKET : '}' ;
+
+    L_BRACKET : '(' ;
+
+    R_BRACKET : ')' ;
+
+    COLON : ':' ;
+
+    SEMICOLON : ';' ;
+
+    COMMENTS_START : '//' ;
+
+    LITERAL : [a-zA-Z]+ ;
+
+    INT : [0-9]+ ;
+
+    NEWLINE : '\r'? '\n' ;
+
+    WS : [ \t]+ -> skip ;
