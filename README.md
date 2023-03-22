@@ -9,4 +9,14 @@
 Current version of language – **JVM** based.
 
 ## Grammar
-– TBD
+
+| **Terminals**        | **Values**                                                                                                                              |
+|----------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| Keywords             | `BEGIN`, `DO`, `ELSE`, `END`, `ENDDO`, `ENDIF`, `IF`, `OUTPUT`, `READ`, `THEN`, `WHILE`, `SWITCH`, `CASE`, `DEFAULT`, `REPEAT`, `UNTIL` |
+| Operands             | `+`, `++`, `-`, `*`, `/`, `=`, `>`, `<`, `<=`, `>=`, `<>`                                                                               |
+| Numbers              | `[0-9]`                                                                                                                                 |
+| Letters              | `[a-z]`                                                                                                                                 |
+| Assignment character | `:=`                                                                                                                                    |
+| Separator            | `;`                                                                                                                                     |
+| Comments             | `//`                                                                                                                                    |
+| Construction         | `(`, `)`, `{`, `}`, `:`                                                                                                                 |
