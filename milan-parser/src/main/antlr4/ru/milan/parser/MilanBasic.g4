@@ -9,7 +9,7 @@
 
 // @todo #5 Implement the Runtime.
 // We have to implement Runtime.
-grammar Program;
+grammar MilanBasic;
 
     BEGIN : 'BEGIN' ;
 
@@ -77,7 +77,7 @@ grammar Program;
 
     COMMENTS_START : '//' ;
 
-    LITERAL : [a-zA-Z]+ ;
+    LITERAL : [A-Za-z_-] [a-zA-Z0-9_-]*;
 
     INT : [0-9]+ ;
 
