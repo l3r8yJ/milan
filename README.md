@@ -21,3 +21,16 @@ Current version of language – **JVM** based.
 | Separator            | `;`                                                                                                     |
 | Comments             | `//`                                                                                                    |
 | Construction         | `(` `)` `{` `}` `:`                                                                                     |
+
+## Progress
+
+Current version of Milan grammar supports expressions like:
+```javascript
+{
+    x = 5;
+    y = 10;
+    while (x < y) {
+        x = x + 1;
+    }
+}
+```
