@@ -1,28 +1,41 @@
 grammar Program;
 
-program: 'BEGIN' STATEMENT+ 'END';
+program: 'BEGIN' body+ 'END';
 
-STATEMENT: ASSIGMENT | OUTPUT | LOOP;
+body: statement*;
 
-ASSIGMENT: IDENTIFIER ':=' EXPR ';';
+statement: assignment | output | loop | conditional | switch_statement ;
 
-OUTPUT: 'OUTPUT' EXPR ';';
+assignment: ID ':=' EXPR ';' NEWLINE?;
 
-LOOP: 'WHILE' EXPR 'DO' STATEMENT+ 'ENDDO'
-     | 'REPEAT' STATEMENT+ 'UNTIL' EXPR;
+output: 'OUTPUT' EXPR ';' NEWLINE?;
 
-EXPR: TERM (('+'|'-') TERM)*;
+loop: 'WHILE' '(' EXPR ')' 'DO' statement+ 'ENDDO' ';' NEWLINE?
+     | 'REPEAT' statement+ 'UNTIL' '(' EXPR ')' ';' NEWLINE?;
 
-TERM: FACTOR (('*'|'/') FACTOR)*;
+conditional: 'IF' '(' EXPR ')' 'THEN' statement+ ('ELSE' statement+)? 'ENDIF' NEWLINE?;
 
-FACTOR: IDENTIFIER
+switch_statement: 'SWITCH' WS? '(' ID ')' '{' switch_case+ '}' NEWLINE?;
+
+switch_case: 'CASE' EXPR ':' statement+ NEWLINE?;
+
+EXPR: SIMPLE_EXPR WS? (('<'|'>'|'='|'<='|'>='|'<>'|'!=') SIMPLE_EXPR)*;
+
+SIMPLE_EXPR: TERM (('+'|'-') TERM)*;
+
+TERM: FACTOR (('*'|'/'|'%') FACTOR)*
+    | FACTOR '++';
+
+FACTOR: ID
       | INT
       | '(' EXPR ')';
 
-IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
+ID: [a-zA-Z_][a-zA-Z0-9_]*;
 
-INT : [0-9]+;
+INT: [0-9]+;
 
-WS: [ \t\r\n]+ -> skip;
+NEWLINE: [\r?\n]+;
+
+WS: [ \t]+ -> skip;
 
 COMMENT: '/*' .*? '*/' -> skip;
