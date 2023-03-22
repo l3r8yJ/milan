@@ -25,12 +25,33 @@ Current version of language – **JVM** based.
 ## Progress
 
 Current version of Milan grammar supports expressions like:
-```javascript
-{
-    x = 5;
-    y = 10;
-    while (x < y) {
-        x = x + 1;
-    }
-}
+```pascal
+BEGIN
+ next := 1;
+ next++;
+ rng := 1;
+ c1 := READ;
+ c2 := c1;
+ WHILE (next=1) DO
+  c1:=c1/10; 
+  IF (c1=0) THEN
+   next:=0
+  ELSE
+   rng++
+  ENDIF
+ ENDDO;
+ OUTPUT(rng);
+ k :=1;
+ REPEAT
+  SWITCH (k)
+  {
+   CASE 1 : rez:=c2-(c2/10)*10
+   CASE 2 : rez:=c2/10
+   CASE 3 : rez:=c2/100
+   DEFAULT: rez:=999
+  };
+  OUTPUT(rez);
+  k++;
+ UNTIL k<rng
+END
 ```
