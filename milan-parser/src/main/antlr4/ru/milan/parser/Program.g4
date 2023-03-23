@@ -14,28 +14,25 @@ whileStmt: WHILE expr DO statements ENDDO;
 
 ifStmt: IF expr THEN statements (ELSE statements)? ENDIF;
 
-incrStmt: ID INCR SEMICOLON
-        | INCR ID SEMICOLON;
+incrStmt: ID INCR SEMICOLON # PreIncrement
+        | INCR ID SEMICOLON # PostIncrement
+        ;
 
 outputStmt: OUTPUT LBRACKET expr RBRACKET SEMICOLON ;
 
-expr: ID
-    | INT
-    | LBRACKET expr RBRACKET
-    | expr op=( MATHS | BOOLS ) expr;
-
-MATHS: SUB
-    | ADD
-    | DIV
-    | MUL
-    ;
-
-BOOLS: LTE
-    | GTE
-    | LT
-    | GT
-    | NEQ
-    | EQ
+expr: ID # Id
+    | INT # Int
+    | expr MUL expr          # Multiplication
+    | expr DIV expr          # Division
+    | expr ADD expr          # Addition
+    | expr SUB expr          # Subtracting
+    | expr EQ  expr          # Equals
+    | expr NEQ expr          # NotEquals
+    | expr GT  expr          # GreaterThan
+    | expr GTE expr          # GreaterEqualsThan
+    | expr LT  expr          # LessThan
+    | expr LTE expr          # LessEqualsThan
+    | LBRACKET expr RBRACKET # Brackets
     ;
 
 BEGIN: 'BEGIN';
@@ -71,5 +68,8 @@ MUL: '*';
 
 ID: [a-zA-Z0-9]+;
 INT: [0-9]+;
+BOOL: 'true'
+    | 'false'
+    ;
 
 WS: [ \t\r\n]+ -> skip;
