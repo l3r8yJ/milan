@@ -23,5 +23,5 @@ jobs:
       - run: mvn clean install
       - uses: codecov/codecov-action@v3
         with:
-          files: ./target/site/jacoco/jacoco.xml
+          files: ./milan-parser/target/site/jacoco/jacoco.xml
           fail_ci_if_error: true
