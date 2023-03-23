@@ -18,7 +18,10 @@ incr_stmt: ID '++' ';' ;
 
 output_stmt: 'OUTPUT' '(' expr ')' ';' ;
 
-expr: ID | INT | expr op=('*'|'/'|'+'|'-'|'='|'=='|'>'|'<'|'<>'|'<='|'>=') expr;
+expr: ID
+    | INT
+    | '(' expr ')'
+    | expr op=('*'|'/'|'+'|'-'|'='|'=='|'>'|'<'|'<>'|'<='|'>=') expr;
 
 ID: [a-zA-Z0-9]+;
 INT: [0-9]+;
