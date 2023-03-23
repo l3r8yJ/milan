@@ -43,6 +43,22 @@ SOFTWARE.
       <groupId>org.antlr</groupId>
       <artifactId>antlr4-runtime</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.cactoos</groupId>
+      <artifactId>cactoos</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit-pioneer</groupId>
+      <artifactId>junit-pioneer</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -53,6 +69,7 @@ SOFTWARE.
             <index>true</index>
             <manifestEntries>
               <Milan-Version>${project.version}</Milan-Version>
+              <Milan-Dob>${maven.build.timestamp}</Milan-Dob>
             </manifestEntries>
           </archive>
         </configuration>
