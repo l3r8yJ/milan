@@ -11,9 +11,7 @@ public class MilanListener extends ProgramBaseListener {
     }
 
     @Override
-    public void enterAddition(final ProgramParser.AdditionContext ctx) {
-        final Integer first = Integer.parseInt(ctx.expr(0).getText());
-        final Integer second = Integer.parseInt(ctx.expr(1).getText());
-
+    public void enterAssignStmt(final ProgramParser.AssignStmtContext ctx) {
+        
     }
 }
