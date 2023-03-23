@@ -1,14 +1,18 @@
 package ru.milan.parser;
 
+import java.io.IOException;
 import java.util.List;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.cactoos.Input;
 import org.cactoos.Output;
 import org.cactoos.Text;
 import org.cactoos.list.ListOf;
+import org.cactoos.text.FormattedText;
+import org.cactoos.text.Joined;
 import org.cactoos.text.Split;
 import org.cactoos.text.TextOf;
 
@@ -26,8 +30,10 @@ public final class Syntax {
         this.target = target;
     }
 
-    public void parse() {
+    public void parse() throws IOException {
         final List<Text> lines = this.lines();
+        final Lexer lexer = new MilanLexer(this.unixize());
+        lexer.removeErrorListeners();
         final ANTLRErrorListener errors = new BaseErrorListener() {
             @Override
             public void syntaxError(
@@ -41,6 +47,7 @@ public final class Syntax {
                 throw new ParsingException(
                     String.format(
                         "[%d:%d] %s: \"%s\"",
+                        line, position, msg,
                         lines.size() < line ? "EOF" : lines.get(line - 1)
                     ),
                     error,
@@ -48,6 +55,14 @@ public final class Syntax {
                 );
             }
         };
+        lexer.addErrorListener(errors);
+    }
+
+    private Text unixize() {
+        return new FormattedText(
+            "%s\n",
+            new Joined(new TextOf("\n"), this.lines())
+        );
     }
 
     private List<Text> lines() {

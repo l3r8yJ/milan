@@ -1,27 +1,71 @@
 grammar Program;
 
-prog: 'BEGIN' statements 'END';
+prog: BEGIN statements END;
 
 statements: stmt+ ;
 
-stmt: assign_stmt | read_stmt | while_stmt | if_stmt | output_stmt | incr_stmt;
+stmt: assignStmt | readStmt | whileStmt | ifStmt | outputStmt | incrStmt;
 
-assign_stmt: ID ':=' expr ';';
+assignStmt: ID ASSIGN expr SEMICOLON;
 
-read_stmt: ID ':=' 'READ' ';';
+readStmt: ID ASSIGN READ SEMICOLON;
 
-while_stmt: 'WHILE' expr 'DO' statements 'ENDDO';
+whileStmt: WHILE expr DO statements ENDDO;
 
-if_stmt: 'IF' expr 'THEN' statements ('ELSE' statements)? 'ENDIF';
+ifStmt: IF expr THEN statements (ELSE statements)? ENDIF;
 
-incr_stmt: ID '++' ';' ;
+incrStmt: ID '++' SEMICOLON
+        | '++' ID SEMICOLON;
 
-output_stmt: 'OUTPUT' '(' expr ')' ';' ;
+outputStmt: OUTPUT LBRACKET expr RBRACKET SEMICOLON ;
 
 expr: ID
     | INT
-    | '(' expr ')'
-    | expr op=('*'|'/'|'+'|'-'|'='|'=='|'>'|'<'|'<>'|'<='|'>=') expr;
+    | LBRACKET expr RBRACKET
+    | expr op=( MATHS | BOOLS ) expr;
+
+MATHS: SUB
+    | ADD
+    | DIV
+    | MUL
+    ;
+
+BOOLS: LTE
+    | GTE
+    | LT
+    | GT
+    | NEQ
+    | EQ
+    ;
+
+BEGIN: 'BEGIN';
+END: 'END';
+IF: 'IF';
+THEN: 'THEN';
+ELSE: 'ELSE';
+ENDIF: 'ENDIF';
+WHILE: 'WHILE';
+DO: 'DO';
+ENDDO: 'ENDDO';
+READ: 'READ';
+OUTPUT: 'OUTPUT';
+
+ASSIGN: ':=';
+SEMICOLON: ';';
+LBRACKET: '(';
+RBRACKET: ')';
+
+LTE: '<=';
+GTE: '>=';
+LT: '<';
+GT: '>';
+NEQ: '<>';
+EQ: '==';
+
+SUB: '-';
+ADD: '+';
+DIV: '/';
+MUL: '*';
 
 ID: [a-zA-Z0-9]+;
 INT: [0-9]+;

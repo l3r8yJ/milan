@@ -1,6 +1,6 @@
 package ru.milan.parser;
 
-public class ParsingException extends RuntimeException {
+public final class ParsingException extends RuntimeException {
 
     private final int line;
 
