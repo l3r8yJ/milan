@@ -20,7 +20,7 @@ Current version of language – **JVM** based.
 | Assignment character | `:=`                                                                          |
 | Separator            | `;`                                                                           |
 | Comments             | `//`                                                                          |
-| Construction         | `(` `)` `{` `}` `:`                                                           |
+| Construction         | `(` `)`                                                                       |
 
 ## Progress
 
