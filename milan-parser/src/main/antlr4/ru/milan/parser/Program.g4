@@ -2,7 +2,7 @@ grammar Program;
 
 prog: BEGIN statements END;
 
-statements: stmt+ ;
+statements: stmt*;
 
 stmt: assignStmt | readStmt | whileStmt | ifStmt | outputStmt | incrStmt;
 
@@ -14,8 +14,8 @@ whileStmt: WHILE expr DO statements ENDDO;
 
 ifStmt: IF expr THEN statements (ELSE statements)? ENDIF;
 
-incrStmt: ID '++' SEMICOLON
-        | '++' ID SEMICOLON;
+incrStmt: ID INCR SEMICOLON
+        | INCR ID SEMICOLON;
 
 outputStmt: OUTPUT LBRACKET expr RBRACKET SEMICOLON ;
 
@@ -54,6 +54,8 @@ ASSIGN: ':=';
 SEMICOLON: ';';
 LBRACKET: '(';
 RBRACKET: ')';
+INCR: '++';
+COMMENT: '//' .*? '\r'? '\n' -> skip;
 
 LTE: '<=';
 GTE: '>=';
