@@ -1,9 +1,8 @@
 grammar Program;
 
-prog: 'BEGIN' stmt_list 'END';
+prog: 'BEGIN' statements 'END';
 
-stmt_list: stmt+
-         ;
+statements: stmt+ ;
 
 stmt: assign_stmt | read_stmt | while_stmt | if_stmt | output_stmt | incr_stmt;
 
@@ -11,9 +10,9 @@ assign_stmt: ID ':=' expr ';';
 
 read_stmt: ID ':=' 'READ' ';';
 
-while_stmt: 'WHILE' expr 'DO' stmt_list 'ENDDO';
+while_stmt: 'WHILE' expr 'DO' statements 'ENDDO';
 
-if_stmt: 'IF' expr 'THEN' stmt_list ( 'ELSE' stmt_list )? 'ENDIF';
+if_stmt: 'IF' expr 'THEN' statements ('ELSE' statements)? 'ENDIF';
 
 incr_stmt: ID '++' ';' ;
 
