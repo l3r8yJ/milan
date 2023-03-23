@@ -1,39 +1,27 @@
 grammar Program;
 
-program: 'BEGIN' statement+ 'END';
+prog: 'BEGIN' stmt_list 'END';
 
-statement: assignment | output | loop | conditional | switch_statement ;
+stmt_list: stmt+
+         ;
 
-assignment: ID ':=' EXPR ';' NEWLINE?;
+stmt: assign_stmt | read_stmt | while_stmt | if_stmt | output_stmt | incr_stmt;
 
-output: 'OUTPUT' EXPR ';' NEWLINE?;
+assign_stmt: ID ':=' expr ';';
 
-loop: 'WHILE' '(' EXPR ')' 'DO' statement+ 'ENDDO' ';' NEWLINE?
-     | 'REPEAT' statement+ 'UNTIL' '(' EXPR ')' ';' NEWLINE?;
+read_stmt: ID ':=' 'READ' ';';
 
-conditional: 'IF' '(' EXPR ')' 'THEN' statement+ ('ELSE' statement+)? 'ENDIF' NEWLINE?;
+while_stmt: 'WHILE' expr 'DO' stmt_list 'ENDDO';
 
-switch_statement: 'SWITCH' WS? '(' ID ')' '{' switch_case+ '}' NEWLINE?;
+if_stmt: 'IF' expr 'THEN' stmt_list ( 'ELSE' stmt_list )? 'ENDIF';
 
-switch_case: 'CASE' EXPR ':' statement+ NEWLINE?;
+incr_stmt: ID '++' ';' ;
 
-EXPR: SIMPLE_EXPR WS? (('<'|'>'|'='|'<='|'>='|'<>'|'!=') SIMPLE_EXPR)*;
+output_stmt: 'OUTPUT' '(' expr ')' ';' ;
 
-SIMPLE_EXPR: TERM (('+'|'-') TERM)*;
+expr: ID | INT | expr op=('*'|'/'|'+'|'-'|'='|'=='|'>'|'<'|'<>'|'<='|'>=') expr;
 
-TERM: FACTOR (('*'|'/'|'%') FACTOR)*
-    | FACTOR '++' ';' ;
-
-FACTOR: ID
-      | INT
-      | '(' EXPR ')';
-
-ID: [a-zA-Z_][a-zA-Z0-9_]*;
-
+ID: [a-zA-Z0-9]+;
 INT: [0-9]+;
 
-NEWLINE: [\r?\n]+;
-
-WS: [ \t]+ -> skip;
-
-COMMENT: '/*' .*? '*/' -> skip;
+WS: [ \t\r\n]+ -> skip;
