@@ -29,11 +29,11 @@ SOFTWARE.
     <artifactId>milan</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>milan-parser</artifactId>
+  <artifactId>milan-interpreter</artifactId>
   <packaging>jar</packaging>
-  <name>milan-parser</name>
+  <name>milan-interpreter</name>
   <version>1.0-SNAPSHOT</version>
-  <description>Milan-to-Java Parser</description>
+  <description>Milan interpreter</description>
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>

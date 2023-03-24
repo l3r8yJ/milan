@@ -40,7 +40,7 @@ SOFTWARE.
   </properties>
   <packaging>pom</packaging>
   <modules>
-    <module>milan-parser</module>
+    <module>milan-interpreter</module>
   </modules>
   <name>milan</name>
   <description>Milan programming language for students of Volzhskiy Polytechnic Institute</description>
