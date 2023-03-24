@@ -12,10 +12,6 @@ import ru.milan.parser.exception.InterpretationException;
 import ru.milan.parser.exception.WrongTypeException;
 
 /**
- * @todo #5 Write an interpretation Class.
- * For example called Interpreter.
- */
-/**
  * @todo #5 Write unit tests for MilanVisitor.
  * Write a unit tests for MilanVisitor.
  */
