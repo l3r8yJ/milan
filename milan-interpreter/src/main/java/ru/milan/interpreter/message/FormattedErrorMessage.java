@@ -1,4 +1,4 @@
-package ru.milan.parser.message;
+package ru.milan.interpreter.message;
 
 import lombok.RequiredArgsConstructor;
 import org.cactoos.Text;

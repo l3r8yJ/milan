@@ -1,4 +1,4 @@
-package ru.milan.parser;
+package ru.milan.interpreter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import lombok.RequiredArgsConstructor;
 import org.cactoos.text.FormattedText;
-import ru.milan.parser.exception.BreakLoop;
-import ru.milan.parser.exception.InterpretationException;
-import ru.milan.parser.exception.WrongTypeException;
+import ru.milan.interpreter.exception.BreakLoop;
+import ru.milan.interpreter.exception.InterpretationException;
+import ru.milan.interpreter.exception.WrongTypeException;
 
 /**
  * @todo #5 Write unit tests for MilanVisitor.

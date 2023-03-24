@@ -1,6 +1,6 @@
-package ru.milan.parser.exception;
+package ru.milan.interpreter.exception;
 
-import ru.milan.parser.message.FormattedErrorMessage;
+import ru.milan.interpreter.message.FormattedErrorMessage;
 
 public class InterpretationException extends RuntimeException {
 

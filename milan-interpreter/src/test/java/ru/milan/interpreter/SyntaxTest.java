@@ -1,4 +1,4 @@
-package ru.milan.parser;
+package ru.milan.interpreter;
 
 import java.nio.file.Path;
 import org.cactoos.io.OutputTo;

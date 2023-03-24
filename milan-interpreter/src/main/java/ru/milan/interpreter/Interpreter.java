@@ -1,4 +1,4 @@
-package ru.milan.parser;
+package ru.milan.interpreter;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -16,15 +16,15 @@ import org.cactoos.text.FormattedText;
 import org.cactoos.text.Joined;
 import org.cactoos.text.Split;
 import org.cactoos.text.TextOf;
-import ru.milan.parser.exception.InterpretationException;
-import ru.milan.parser.message.FormattedErrorMessage;
+import ru.milan.interpreter.exception.InterpretationException;
+import ru.milan.interpreter.message.FormattedErrorMessage;
 
 /**
  * @todo #5 Unit tests for Interpreter.
  * We have to write unit tests for Interpreter.
  */
 /**
- * It reads the input file, creates a lexer and a parser, and executes the parser
+ * It reads the input file, creates a lexer and a interpreter, and executes the interpreter
  */
 public final class Interpreter {
 
@@ -38,7 +38,7 @@ public final class Interpreter {
 
     /**
      * It reads the input file,
-     * creates a lexer and a parser, and executes the parser
+     * creates a lexer and a interpreter, and executes the interpreter
      */
     public void run() throws IOException {
         final List<Text> lines = this.lines();
@@ -60,7 +60,7 @@ public final class Interpreter {
     /**
      * It walks the parse tree and executes the program
      *
-     * @param parser The parser that was created by the ANTLR4 runtime.
+     * @param parser The interpreter that was created by the ANTLR4 runtime.
      * @param stderr The stream to which error messages are written.
      */
     private void execute(final ProgramParser parser, final PrintStream stderr) {
@@ -79,7 +79,7 @@ public final class Interpreter {
      * It creates a visitor that will visit the parse tree of the program, and then
      * it visits the parse tree
      *
-     * @param parser The parser object that was created by the ANTLR parser
+     * @param parser The interpreter object that was created by the ANTLR interpreter
      * generator.
      */
     private void walkParseTree(final ProgramParser parser) {

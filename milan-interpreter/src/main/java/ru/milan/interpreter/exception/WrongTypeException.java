@@ -1,4 +1,4 @@
-package ru.milan.parser.exception;
+package ru.milan.interpreter.exception;
 
 import java.io.Serial;
 

@@ -1,4 +1,4 @@
-package ru.milan.parser;
+package ru.milan.interpreter;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;

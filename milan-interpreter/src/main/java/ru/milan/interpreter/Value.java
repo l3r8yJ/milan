@@ -1,9 +1,9 @@
-package ru.milan.parser;
+package ru.milan.interpreter;
 
 import java.util.Objects;
 import java.util.function.BiFunction;
 import org.cactoos.text.FormattedText;
-import ru.milan.parser.exception.WrongTypeException;
+import ru.milan.interpreter.exception.WrongTypeException;
 
 /**
  * @todo #5 Unit test for Value.
