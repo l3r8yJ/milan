@@ -1,4 +1,4 @@
-package ru.milan.parser.exception;
+package ru.milan.parser;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,6 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.cactoos.Text;
-import ru.milan.parser.ParsingException;
 
 @RequiredArgsConstructor
 public final class ErrorListener extends BaseErrorListener {
