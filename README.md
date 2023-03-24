@@ -5,6 +5,8 @@
 [![DevOps By Rultor.com](https://www.rultor.com/b/objectionary/eo)](http://www.rultor.com/p/l3r8yJ/milan)
 [![We recommend IntelliJ IDEA](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
 
+[![codecov](https://codecov.io/gh/l3r8yJ/milan/branch/master/graph/badge.svg?token=W8HLMLKHDX)](https://codecov.io/gh/l3r8yJ/milan)
+
 **Milan** is a very simple programming language designed to teach students at Volzhskiy Polytechnic Institute.
 
 Current version of language – **JVM** based.
