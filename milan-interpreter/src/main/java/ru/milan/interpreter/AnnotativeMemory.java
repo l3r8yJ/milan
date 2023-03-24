@@ -4,10 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @todo #5 Unit tests for AnnotativeMemory.
- * Write unit tests for AnnotativeMemory.
- */
-/**
  * The memory, annotation way.
  */
 public final class AnnotativeMemory implements Memory<Atom> {
