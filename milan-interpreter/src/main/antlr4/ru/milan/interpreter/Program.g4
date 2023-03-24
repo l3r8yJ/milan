@@ -8,7 +8,7 @@ stmt: assignStmt | readStmt | whileStmt | ifStmt | outputStmt | incrStmt;
 
 assignStmt: ID ASSIGN expr SEMICOLON;
 
-readStmt: ID ASSIGN READ SEMICOLON;
+readStmt: ID ASSIGN READ LBRACKET expr RBRACKET SEMICOLON;
 
 whileStmt: WHILE expr DO block ENDDO;
 
