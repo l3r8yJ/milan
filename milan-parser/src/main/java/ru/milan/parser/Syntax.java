@@ -2,11 +2,7 @@ package ru.milan.parser;
 
 import java.io.IOException;
 import java.util.List;
-import org.antlr.v4.runtime.ANTLRErrorListener;
-import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
 import org.cactoos.Input;
 import org.cactoos.Output;
 import org.cactoos.Text;
@@ -15,7 +11,6 @@ import org.cactoos.text.FormattedText;
 import org.cactoos.text.Joined;
 import org.cactoos.text.Split;
 import org.cactoos.text.TextOf;
-import ru.milan.parser.exception.ErrorListener;
 
 /**
  * It takes a file name,

@@ -1,4 +1,4 @@
-package ru.milan.parser.exception;
+package ru.milan.parser;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -6,10 +6,9 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.cactoos.Text;
-import ru.milan.parser.ParsingException;
 
 @RequiredArgsConstructor
-public class ErrorListener extends BaseErrorListener {
+public final class ErrorListener extends BaseErrorListener {
 
     private final List<Text> lines;
 
@@ -26,7 +25,7 @@ public class ErrorListener extends BaseErrorListener {
             String.format(
                 "[%d:%d] %s: \"%s\"",
                 line, position, msg,
-                lines.size() < line ? "EOF" : lines.get(line - 1)
+                this.lines.size() < line ? "EOF" : this.lines.get(line - 1)
             ),
             error,
             line
