@@ -6,6 +6,11 @@ import org.cactoos.text.FormattedText;
 import ru.milan.parser.exception.WrongTypeException;
 
 /**
+ * @todo #5 Unit test for Value.
+ * Write unit-tests for this class.
+ */
+/
+/**
  * It's a wrapper around an object that can be either a number or a string
  */
 public final class Value {
