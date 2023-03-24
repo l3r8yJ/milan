@@ -15,7 +15,12 @@ import org.cactoos.text.FormattedText;
 import org.cactoos.text.Joined;
 import org.cactoos.text.Split;
 import org.cactoos.text.TextOf;
+import ru.milan.parser.exception.ErrorListener;
 
+/**
+ * It takes a file name,
+ * reads the file, and parses it
+ */
 public final class Syntax {
 
     private final String name;
@@ -34,28 +39,7 @@ public final class Syntax {
         final List<Text> lines = this.lines();
         final Lexer lexer = new MilanLexer(this.unixize());
         lexer.removeErrorListeners();
-        final ANTLRErrorListener errors = new BaseErrorListener() {
-            @Override
-            public void syntaxError(
-                final Recognizer<?, ?> recognizer,
-                final Object symbol,
-                final int line,
-                final int position,
-                final String msg,
-                final RecognitionException error
-            ) {
-                throw new ParsingException(
-                    String.format(
-                        "[%d:%d] %s: \"%s\"",
-                        line, position, msg,
-                        lines.size() < line ? "EOF" : lines.get(line - 1)
-                    ),
-                    error,
-                    line
-                );
-            }
-        };
-        lexer.addErrorListener(errors);
+        lexer.addErrorListener(new ErrorListener(lines));
     }
 
     private Text unixize() {
