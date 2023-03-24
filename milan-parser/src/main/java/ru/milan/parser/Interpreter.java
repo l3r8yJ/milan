@@ -1,0 +1,135 @@
+package ru.milan.parser;
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.List;
+import org.antlr.v4.runtime.ANTLRErrorListener;
+import org.antlr.v4.runtime.BailErrorStrategy;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.InputMismatchException;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.antlr.v4.runtime.tree.ParseTreeVisitor;
+import org.cactoos.Input;
+import org.cactoos.Text;
+import org.cactoos.list.ListOf;
+import org.cactoos.text.FormattedText;
+import org.cactoos.text.Joined;
+import org.cactoos.text.Split;
+import org.cactoos.text.TextOf;
+import ru.milan.parser.exception.InterpretationException;
+import ru.milan.parser.message.FormattedErrorMessage;
+
+/**
+ * @todo #5 Unit tests for Interpreter.
+ * We have to write unit tests for Interpreter.
+ */
+/**
+ * It reads the input file, creates a lexer and a parser, and executes the parser
+ */
+public final class Interpreter {
+
+    private final Memory<Value> memory;
+    private final Input input;
+
+    public Interpreter(final Memory<Value> memory, final Input input) {
+        this.memory = new AnnotativeMemory();
+        this.input = input;
+    }
+
+    /**
+     * It reads the input file,
+     * creates a lexer and a parser, and executes the parser
+     */
+    public void run() throws IOException {
+        final List<Text> lines = this.lines();
+        final ANTLRErrorListener errors = new ErrorListener(lines);
+        final ProgramLexer lexer = new MilanLexer(this.unixize());
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(errors);
+        final ProgramParser parser = new ProgramParser(
+            new CommonTokenStream(lexer)
+        );
+        parser.setErrorHandler(new BailErrorStrategy());
+        parser.removeErrorListeners();
+        parser.addErrorListener(errors);
+        try (final PrintStream stderr = new PrintStream(System.err, true)) {
+            this.execute(parser, stderr);
+        }
+    }
+
+    /**
+     * It walks the parse tree and executes the program
+     *
+     * @param parser The parser that was created by the ANTLR4 runtime.
+     * @param stderr The stream to which error messages are written.
+     */
+    private void execute(final ProgramParser parser, final PrintStream stderr) {
+        try {
+            this.walkParseTree(parser);
+        } catch (final InterpretationException ex) {
+            stderr.println(ex.getMessage());
+            throw new IllegalStateException(ex);
+        } catch (final ParseCancellationException ex) {
+            Interpreter.formatIfParseCancelled(stderr, ex);
+            throw new IllegalStateException(ex);
+        }
+    }
+
+    /**
+     * It creates a visitor that will visit the parse tree of the program, and then
+     * it visits the parse tree
+     *
+     * @param parser The parser object that was created by the ANTLR parser
+     * generator.
+     */
+    private void walkParseTree(final ProgramParser parser) {
+        final ParseTreeVisitor<Value> visitor = new MilanVisitor(
+            System.in,
+            new PrintStream(System.out),
+            new PrintStream(System.err),
+            this.memory
+        );
+        visitor.visit(parser.prog());
+    }
+
+    /**
+     * If the exception is caused by an input mismatch, print the line number and
+     * column number of the offending token
+     *
+     * @param stderr The stream to write the error message to.
+     * @param ex The exception that was thrown.
+     */
+    private static void formatIfParseCancelled(
+        final PrintStream stderr,
+        final ParseCancellationException ex
+    ) {
+        if (ex.getCause() instanceof InputMismatchException) {
+            final InputMismatchException exc =
+                InputMismatchException.class.cast(ex.getCause());
+            stderr.println(
+                new FormattedErrorMessage(
+                    exc.getOffendingToken().getLine(),
+                    exc.getOffendingToken().getCharPositionInLine(),
+                    "Syntax error"
+                )
+            );
+        }
+    }
+
+    /**
+     * Normalize input to UNIX format.
+     * Ensure EOL at EOF.
+     *
+     * @return UNIX formatted text.
+     */
+    private Text unixize() {
+        return new FormattedText(
+            "%s\n",
+            new Joined(new TextOf("\n"), this.lines())
+        );
+    }
+
+    private List<Text> lines() {
+        return new ListOf<>(new Split(new TextOf(this.input), "\r?\n"));
+    }
+}
