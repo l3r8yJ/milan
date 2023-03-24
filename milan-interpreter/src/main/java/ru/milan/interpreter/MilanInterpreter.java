@@ -26,12 +26,12 @@ import ru.milan.interpreter.message.FormattedErrorMessage;
 /**
  * It reads the input file, creates a lexer and a interpreter, and executes the interpreter
  */
-public final class Interpreter {
+public final class MilanInterpreter {
 
     private final Memory<Atom> memory;
     private final Input input;
 
-    public Interpreter(final Memory<Atom> memory, final Input input) {
+    public MilanInterpreter(final Memory<Atom> memory, final Input input) {
         this.memory = new AnnotativeMemory();
         this.input = input;
     }
@@ -70,7 +70,7 @@ public final class Interpreter {
             stderr.println(ex.getMessage());
             throw new IllegalStateException(ex);
         } catch (final ParseCancellationException ex) {
-            Interpreter.formatIfParseCancelled(stderr, ex);
+            MilanInterpreter.formatIfParseCancelled(stderr, ex);
             throw new IllegalStateException(ex);
         }
     }

@@ -1,5 +1,7 @@
 package ru.milan.interpreter;
 
+import ru.milan.interpreter.exception.WrongTypeException;
+
 /**
  * Atom of Milan. Smallest unit.
  */
@@ -148,6 +150,7 @@ public interface Atom {
 
     /**
      * > Asserts that the given value is a number
+     * @throws WrongTypeException When assertion failed
      */
-    void assertNumber();
+    void assertNumber() throws WrongTypeException;
 }
