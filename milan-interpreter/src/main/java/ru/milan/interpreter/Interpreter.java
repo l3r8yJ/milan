@@ -28,10 +28,10 @@ import ru.milan.interpreter.message.FormattedErrorMessage;
  */
 public final class Interpreter {
 
-    private final Memory<Value> memory;
+    private final Memory<Atom> memory;
     private final Input input;
 
-    public Interpreter(final Memory<Value> memory, final Input input) {
+    public Interpreter(final Memory<Atom> memory, final Input input) {
         this.memory = new AnnotativeMemory();
         this.input = input;
     }
@@ -83,7 +83,7 @@ public final class Interpreter {
      * generator.
      */
     private void walkParseTree(final ProgramParser parser) {
-        final ParseTreeVisitor<Value> visitor = new MilanVisitor(
+        final ParseTreeVisitor<Atom> visitor = new MilanVisitor(
             System.in,
             new PrintStream(System.out),
             new PrintStream(System.err),

@@ -10,17 +10,17 @@ import java.util.Map;
 /**
  * The memory, annotation way.
  */
-public final class AnnotativeMemory implements Memory<Value>{
+public final class AnnotativeMemory implements Memory<Atom> {
 
-    private final Map<String, Value> memory = new HashMap<>(0);
+    private final Map<String, Atom> memory = new HashMap<>(0);
 
     @Override
-    public Value get(final String name) {
+    public Atom get(final String name) {
         return this.memory.get(name);
     }
 
     @Override
-    public void assign(final String name, final Value value) {
+    public void assign(final String name, final Atom value) {
         this.memory.put(name, value);
     }
 

@@ -19,85 +19,85 @@ import ru.milan.interpreter.exception.WrongTypeException;
  * It's a visitor that visits the parse tree and executes the program.
  */
 @RequiredArgsConstructor
-public final class MilanVisitor extends ProgramBaseVisitor<Value> {
+public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
 
     private final InputStream stdin;
     private final PrintStream stdout;
     private final PrintStream stderr;
-    private final Memory<Value> memory;
+    private final Memory<Atom> memory;
 
     private PrintStream print;
     private BufferedReader input;
 
     @Override
-    public Value visitInt(final ProgramParser.IntContext ctx) {
+    public Atom visitInt(final ProgramParser.IntContext ctx) {
         return new Value(Integer.parseInt(ctx.INT().getText()));
     }
 
     @Override
-    public Value visitId(final ProgramParser.IdContext ctx) {
+    public Atom visitId(final ProgramParser.IdContext ctx) {
         return this.memory.get(ctx.getText());
     }
 
     @Override
-    public Value visitAssignStmt(final ProgramParser.AssignStmtContext ctx) {
-        final Value value = this.visit(ctx.expr());
+    public Atom visitAssignStmt(final ProgramParser.AssignStmtContext ctx) {
+        final Atom value = this.visit(ctx.expr());
         this.memory.assign(ctx.ID().getText(), value);
         return value;
     }
 
     @Override
-    public Value visitMultiplication(final ProgramParser.MultiplicationContext ctx) {
+    public Atom visitMultiplication(final ProgramParser.MultiplicationContext ctx) {
         return this.visit(ctx.expr(0)).mul(this.visit(ctx.expr(1)));
     }
 
     @Override
-    public Value visitDivision(final ProgramParser.DivisionContext ctx) {
+    public Atom visitDivision(final ProgramParser.DivisionContext ctx) {
         return this.visit(ctx.expr(0)).div(this.visit(ctx.expr(1)));
     }
 
     @Override
-    public Value visitAddition(final ProgramParser.AdditionContext ctx) {
+    public Atom visitAddition(final ProgramParser.AdditionContext ctx) {
         return this.visit(ctx.expr(0)).add(this.visit(ctx.expr(1)));
     }
 
     @Override
-    public Value visitSubtracting(final ProgramParser.SubtractingContext ctx) {
+    public Atom visitSubtracting(final ProgramParser.SubtractingContext ctx) {
         return this.visit(ctx.expr(0)).sub(this.visit(ctx.expr(1)));
     }
 
     @Override
-    public Value visitGreaterThan(final ProgramParser.GreaterThanContext ctx) {
+    public Atom visitGreaterThan(final ProgramParser.GreaterThanContext ctx) {
         return this.visit(ctx.expr(0)).gt(this.visit(ctx.expr(1)));
     }
 
     @Override
-    public Value visitGreaterEqualsThan(final ProgramParser.GreaterEqualsThanContext ctx) {
+    public Atom visitGreaterEqualsThan(final ProgramParser.GreaterEqualsThanContext ctx) {
         return this.visit(ctx.expr(0)).gte(this.visit(ctx.expr(1)));
     }
 
     @Override
-    public Value visitLessThan(final ProgramParser.LessThanContext ctx) {
+    public Atom visitLessThan(final ProgramParser.LessThanContext ctx) {
         return this.visit(ctx.expr(0)).lt(this.visit(ctx.expr(1)));
     }
 
     @Override
-    public Value visitLessEqualsThan(final ProgramParser.LessEqualsThanContext ctx) {
+    public Atom visitLessEqualsThan(final ProgramParser.LessEqualsThanContext ctx) {
         return this.visit(ctx.expr(0)).lte(this.visit(ctx.expr(1)));
     }
 
     @Override
-    public Value visitNotEquals(final ProgramParser.NotEqualsContext ctx) {
+    public Atom visitNotEquals(final ProgramParser.NotEqualsContext ctx) {
         return this.visit(ctx.expr(0)).neq(this.visit(ctx.expr(1)));
     }
 
     @Override
-    public Value visitEquals(final ProgramParser.EqualsContext ctx) {
+    public Atom visitEquals(final ProgramParser.EqualsContext ctx) {
         return this.visit(ctx.expr(0)).eq(this.visit(ctx.expr(1)));
     }
 
     @Override
-    public Value visitStmt(final ProgramParser.StmtContext ctx) {
+    public Atom visitStmt(final ProgramParser.StmtContext ctx) {
         try {
             return super.visitStmt(ctx);
         } catch (final WrongTypeException ex) {
@@ -114,32 +114,31 @@ public final class MilanVisitor extends ProgramBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitIfStmt(final ProgramParser.IfStmtContext ctx) {
-        final Value condition = this.visit(ctx.expr());
+    public Atom visitIfStmt(final ProgramParser.IfStmtContext ctx) {
+        final Atom condition = this.visit(ctx.expr());
         if (condition.isTrue()) {
             return this.visit(ctx.block());
-        } else {
-            if (null != ctx.elseStmt()) {
-                return visit(ctx.elseStmt());
-            }
+        }
+        if (null != ctx.elseStmt()) {
+            return this.visit(ctx.elseStmt());
         }
         return condition;
     }
 
     @Override
-    public Value visitOutputStmt(final ProgramParser.OutputStmtContext ctx) {
-        final Value value = visit(ctx.expr());
-        this.print.println(value.internal());
+    public Atom visitOutputStmt(final ProgramParser.OutputStmtContext ctx) {
+        final Atom value = this.visit(ctx.expr());
+        this.print.println(value.asInteger());
         return value;
     }
 
     @Override
-    public Value visitReadStmt(final ProgramParser.ReadStmtContext ctx) {
-        this.print.print(this.visit(ctx.ID()).internal());
+    public Atom visitReadStmt(final ProgramParser.ReadStmtContext ctx) {
+        this.print.print(this.visit(ctx.ID()).asInteger());
         final String name = ctx.ID().getText();
         try {
             final String line = this.input.readLine();
-            final Value value = new Value(Integer.parseInt(line));
+            final Atom value = new Value(Integer.parseInt(line));
             this.memory.assign(name, value);
             return value;
         } catch (final IOException ex) {
@@ -148,8 +147,8 @@ public final class MilanVisitor extends ProgramBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitWhileStmt(final ProgramParser.WhileStmtContext ctx) {
-        Value condition = this.visit(ctx.expr());
+    public Atom visitWhileStmt(final ProgramParser.WhileStmtContext ctx) {
+        Atom condition = this.visit(ctx.expr());
         while (condition.isTrue()) {
             try {
                 this.visit(ctx.block());
