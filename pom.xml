@@ -207,8 +207,8 @@ SOFTWARE.
                   <goal>antlr4</goal>
                 </goals>
                 <configuration>
-                  <visitor>false</visitor>
-                  <listener>true</listener>
+                  <visitor>true</visitor>
+                  <listener>false</listener>
                 </configuration>
               </execution>
             </executions>
