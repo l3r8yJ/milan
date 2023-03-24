@@ -8,10 +8,12 @@ import java.io.PrintStream;
 import lombok.RequiredArgsConstructor;
 import org.cactoos.text.FormattedText;
 import ru.milan.parser.exception.BreakLoop;
-import ru.milan.parser.exception.ContinueLoop;
 import ru.milan.parser.exception.InterpretationException;
 import ru.milan.parser.exception.WrongTypeException;
 
+/**
+ * It's a visitor that visits the parse tree and executes the program.
+ */
 @RequiredArgsConstructor
 public final class MilanVisitor extends ProgramBaseVisitor<Value> {
 
@@ -156,11 +158,18 @@ public final class MilanVisitor extends ProgramBaseVisitor<Value> {
         return new Value(0);
     }
 
+    /**
+     * Initialize the print and input variables to be used for the rest of the
+     * program.
+     */
     private void init() {
         this.print = new PrintStream(this.stdout);
         this.input = new BufferedReader(new InputStreamReader(this.stdin));
     }
 
+    /**
+     * This function closes the print stream
+     */
     private void clean() {
         this.print.close();
     }

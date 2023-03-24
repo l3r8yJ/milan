@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.cactoos.Text;
 import org.cactoos.text.FormattedText;
 
+/**
+ * It's a `Text` that formats an error message.
+ */
 @RequiredArgsConstructor
 public final class FormattedErrorMessage implements Text {
 
