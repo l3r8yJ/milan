@@ -208,7 +208,7 @@ SOFTWARE.
                 </goals>
                 <configuration>
                   <visitor>true</visitor>
-                  <listener>false</listener>
+                  <listener>true</listener>
                 </configuration>
               </execution>
             </executions>

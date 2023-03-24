@@ -1,8 +1,8 @@
 grammar Program;
 
-prog: BEGIN statements END;
+prog: BEGIN block END;
 
-statements: stmt*;
+block: stmt*;
 
 stmt: assignStmt | readStmt | whileStmt | ifStmt | outputStmt | incrStmt;
 
@@ -10,9 +10,11 @@ assignStmt: ID ASSIGN expr SEMICOLON;
 
 readStmt: ID ASSIGN READ SEMICOLON;
 
-whileStmt: WHILE expr DO statements ENDDO;
+whileStmt: WHILE expr DO block ENDDO;
 
-ifStmt: IF expr THEN statements (ELSE statements)? ENDIF;
+ifStmt: IF expr THEN block (elseStmt)? ENDIF;
+
+elseStmt: ELSE block;
 
 incrStmt: ID INCR SEMICOLON # PreIncrement
         | INCR ID SEMICOLON # PostIncrement
