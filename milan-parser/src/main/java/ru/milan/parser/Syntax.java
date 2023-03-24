@@ -17,6 +17,10 @@ import org.cactoos.text.Split;
 import org.cactoos.text.TextOf;
 import ru.milan.parser.exception.ErrorListener;
 
+/**
+ * It takes a file name,
+ * reads the file, and parses it
+ */
 public final class Syntax {
 
     private final String name;

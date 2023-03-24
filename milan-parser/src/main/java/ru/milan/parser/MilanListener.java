@@ -10,8 +10,4 @@ public class MilanListener extends ProgramBaseListener {
         this.memory = new HashMap<>(0);
     }
 
-    @Override
-    public void enterAssignStmt(final ProgramParser.AssignStmtContext ctx) {
-        
-    }
 }
