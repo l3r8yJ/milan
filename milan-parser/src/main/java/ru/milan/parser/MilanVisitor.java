@@ -1,11 +1,14 @@
 package ru.milan.parser;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import lombok.RequiredArgsConstructor;
 import org.cactoos.text.FormattedText;
+import ru.milan.parser.exception.BreakLoop;
+import ru.milan.parser.exception.ContinueLoop;
 import ru.milan.parser.exception.InterpretationException;
 import ru.milan.parser.exception.WrongTypeException;
 
@@ -58,23 +61,6 @@ public final class MilanVisitor extends ProgramBaseVisitor<Value> {
     }
 
     @Override
-    public Value visitStmt(final ProgramParser.StmtContext ctx) {
-        try {
-            return super.visitStmt(ctx);
-        } catch (final WrongTypeException ex) {
-            throw new InterpretationException(
-                ctx.getStart().getLine(),
-                ctx.getStart().getCharPositionInLine(),
-                new FormattedText(
-                    "Error while interpretation: '%s'\n",
-                    ex.getMessage()
-                ).toString(),
-                ex
-            );
-        }
-    }
-
-    @Override
     public Value visitGreaterThan(final ProgramParser.GreaterThanContext ctx) {
         return this.visit(ctx.expr(0)).gt(this.visit(ctx.expr(1)));
     }
@@ -105,14 +91,69 @@ public final class MilanVisitor extends ProgramBaseVisitor<Value> {
     }
 
     @Override
+    public Value visitStmt(final ProgramParser.StmtContext ctx) {
+        try {
+            return super.visitStmt(ctx);
+        } catch (final WrongTypeException ex) {
+            throw new InterpretationException(
+                ctx.getStart().getLine(),
+                ctx.getStart().getCharPositionInLine(),
+                new FormattedText(
+                    "Error while interpretation: '%s'\n",
+                    ex.getMessage()
+                ).toString(),
+                ex
+            );
+        }
+    }
+
+    @Override
     public Value visitIfStmt(final ProgramParser.IfStmtContext ctx) {
         final Value condition = this.visit(ctx.expr());
         if (condition.isTrue()) {
             return this.visit(ctx.block());
         } else {
-//            for (ProgramBaseVisitor)
+            if (null != ctx.elseStmt()) {
+                return visit(ctx.elseStmt());
+            }
         }
         return condition;
+    }
+
+    @Override
+    public Value visitOutputStmt(final ProgramParser.OutputStmtContext ctx) {
+        final Value value = visit(ctx.expr());
+        this.print.println(value.internal());
+        return value;
+    }
+
+    @Override
+    public Value visitReadStmt(final ProgramParser.ReadStmtContext ctx) {
+        this.print.print(this.visit(ctx.ID()).internal());
+        final String name = ctx.ID().getText();
+        try {
+            final String line = this.input.readLine();
+            final Value value = new Value(Integer.parseInt(line));
+            this.memory.assign(name, value);
+            return value;
+        } catch (final IOException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+
+    @Override
+    public Value visitWhileStmt(final ProgramParser.WhileStmtContext ctx) {
+        Value condition = this.visit(ctx.expr());
+        while (condition.isTrue()) {
+            try {
+                this.visit(ctx.block());
+            } catch (final BreakLoop ignored) {
+                break;
+            } finally {
+                condition = this.visit(ctx.expr());
+            }
+        }
+        return new Value(0);
     }
 
     private void init() {
