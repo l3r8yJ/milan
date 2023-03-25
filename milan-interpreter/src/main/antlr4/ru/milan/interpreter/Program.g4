@@ -16,8 +16,8 @@ ifStmt: IF expr THEN block (elseStmt)? ENDIF;
 
 elseStmt: ELSE block;
 
-incrStmt: ID INCR SEMICOLON # PreIncrement
-        | INCR ID SEMICOLON # PostIncrement
+incrStmt: ID INCR SEMICOLON
+        | INCR ID SEMICOLON
         ;
 
 outputStmt: OUTPUT LBRACKET expr RBRACKET SEMICOLON ;
@@ -68,7 +68,7 @@ ADD: '+';
 DIV: '/';
 MUL: '*';
 
-ID: [a-zA-Z0-9]+;
+ID: [a-zA-Z]+;
 INT: [0-9]+;
 BOOL: 'true'
     | 'false'

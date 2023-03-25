@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import lombok.RequiredArgsConstructor;
 import org.cactoos.text.FormattedText;
-import ru.milan.interpreter.exception.BreakLoop;
 import ru.milan.interpreter.exception.InterpretationException;
 import ru.milan.interpreter.exception.WrongTypeException;
 
@@ -18,7 +16,6 @@ import ru.milan.interpreter.exception.WrongTypeException;
 /**
  * It's a visitor that visits the parse tree and executes the program.
  */
-@RequiredArgsConstructor
 public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
 
     private final InputStream stdin;
@@ -28,6 +25,19 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
 
     private PrintStream print;
     private BufferedReader input;
+
+    public MilanVisitor(
+        final InputStream stdin,
+        final PrintStream stdout,
+        final PrintStream stderr,
+        final Memory<Atom> memory
+    ) {
+        this.stdin = stdin;
+        this.stdout = stdout;
+        this.stderr = stderr;
+        this.memory = memory;
+        this.init();
+    }
 
     @Override
     public Atom visitProg(final ProgramParser.ProgContext ctx) {
@@ -54,6 +64,14 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
         final Atom value = this.visit(ctx.expr());
         this.memory.assign(ctx.ID().getText(), value);
         return value;
+    }
+
+    @Override
+    public Atom visitIncrStmt(final ProgramParser.IncrStmtContext ctx) {
+        final String name = ctx.ID().getText();
+        final Atom increment = this.memory.get(name).add(new Value(1));
+        this.memory.assign(name, increment);
+        return increment;
     }
 
     @Override
@@ -144,7 +162,6 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
 
     @Override
     public Atom visitReadStmt(final ProgramParser.ReadStmtContext ctx) {
-        this.print.print(this.visit(ctx.ID()).asInteger());
         final String name = ctx.ID().getText();
         try {
             final String line = this.input.readLine();
@@ -160,13 +177,8 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
     public Atom visitWhileStmt(final ProgramParser.WhileStmtContext ctx) {
         Atom condition = this.visit(ctx.expr());
         while (condition.isTrue()) {
-            try {
-                this.visit(ctx.block());
-            } catch (final BreakLoop ignored) {
-                break;
-            } finally {
-                condition = this.visit(ctx.expr());
-            }
+            this.visit(ctx.block());
+            condition = this.visit(ctx.expr());
         }
         return new Value(0);
     }
