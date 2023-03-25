@@ -2,8 +2,10 @@ package ru.milan.interpreter;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.milan.interpreter.exception.AtomNotDefinedException;
 
 final class AnnotativeMemoryTest {
 
@@ -22,10 +24,9 @@ final class AnnotativeMemoryTest {
             this.mem.get("myAtom").asInteger(),
             Matchers.is(0)
         );
-        MatcherAssert.assertThat(
-            "Doesn't contains wrong atom",
-            this.mem.get("notMyAtom"),
-            Matchers.nullValue()
+        Assertions.assertThrows(
+            AtomNotDefinedException.class,
+            () -> this.mem.get("notMyAtom")
         );
     }
 
@@ -34,14 +35,13 @@ final class AnnotativeMemoryTest {
         this.mem.assign("1-2-3", new Value(123));
         MatcherAssert.assertThat(
             "Before clear",
-            this.mem.get("1-2-3"),
-            Matchers.notNullValue()
+            this.mem.get("1-2-3").asInteger(),
+            Matchers.equalTo(123)
         );
         this.mem.free();
-        MatcherAssert.assertThat(
-            "Memory free",
-            this.mem.get("1-2-3"),
-            Matchers.nullValue()
+        Assertions.assertThrows(
+            AtomNotDefinedException.class,
+            () -> this.mem.get("1-2-3")
         );
     }
 }

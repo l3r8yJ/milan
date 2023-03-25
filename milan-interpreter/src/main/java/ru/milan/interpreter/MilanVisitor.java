@@ -30,6 +30,16 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
     private BufferedReader input;
 
     @Override
+    public Atom visitProg(final ProgramParser.ProgContext ctx) {
+        this.init();
+        try {
+            return super.visitProg(ctx);
+        } finally {
+            this.shutdown();
+        }
+    }
+
+    @Override
     public Atom visitInt(final ProgramParser.IntContext ctx) {
         return new Value(Integer.parseInt(ctx.INT().getText()));
     }
@@ -173,7 +183,7 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
     /**
      * This function closes the print stream
      */
-    private void clean() {
+    private void shutdown() {
         this.print.close();
     }
 }
