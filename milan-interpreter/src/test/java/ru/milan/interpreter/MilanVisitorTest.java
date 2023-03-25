@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+/**
+ * Test case for {@link MilanVisitor}.
+ */
 final class MilanVisitorTest {
 
     private ProgramVisitor<Atom> visitor;
