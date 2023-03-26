@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import org.cactoos.text.FormattedText;
 import ru.milan.interpreter.exception.InterpretationException;
 import ru.milan.interpreter.exception.WrongTypeException;
+import ru.milan.interpreter.message.FormattedErrorMessage;
 
 /**
  * @todo #5 Write unit tests for MilanVisitor.
@@ -251,9 +252,18 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
         final String name = ctx.ID().getText();
         try {
             final String line = this.input.readLine();
-            final Atom value = new Value(Integer.parseInt(line));
+            final Atom value = new Value(Integer.valueOf(line));
             this.memory.assign(name, value);
             return value;
+        } catch (final NumberFormatException ex) {
+            throw new WrongTypeException(
+                new FormattedErrorMessage(
+                    ctx.getStart().getLine(),
+                    ctx.getStart().getCharPositionInLine(),
+                    String.format("Atom {%s} isn't integer", name)
+                ).asString(),
+                ex
+            );
         } catch (final IOException ex) {
             throw new IllegalStateException(ex);
         }

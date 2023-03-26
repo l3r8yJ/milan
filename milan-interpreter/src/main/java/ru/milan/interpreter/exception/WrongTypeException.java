@@ -10,4 +10,8 @@ public final class WrongTypeException extends RuntimeException {
     public WrongTypeException(final String message) {
         super(message);
     }
+
+    public WrongTypeException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 }
