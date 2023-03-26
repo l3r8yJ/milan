@@ -95,8 +95,7 @@ final class MilanVisitorTest {
 
     @Test
     void visitsIncrement() {
-        this.memory.assign("A", new Value(10));
-        this.visitor = new MilanVisitor(this.memory);
+        this.fillAndInjectMemoryToVisitor(10, new MilanVisitor(this.memory));
         final Atom pre = this.visitor.visit(
             MilanVisitorTest.parser("preincrement.mil").incrStmt()
         );
@@ -174,9 +173,27 @@ final class MilanVisitorTest {
      * @param value The value to be assigned to the variable A.
      */
     private void injectBaosAndValue(final int value) {
-        System.setOut(new PrintStream(this.baos));
+        this.injectBaosIntoSystemOut();
+        this.fillAndInjectMemoryToVisitor(value, new MilanVisitor(System.out, this.memory));
+    }
+
+    /**
+     * This function fills the memory with a value and injects the visitor into the
+     * memory.
+     *
+     * @param value The value to be assigned to the memory cell A.
+     * @param out The visitor that will be injected with the memory.
+     */
+    private void fillAndInjectMemoryToVisitor(final int value, final ProgramVisitor<Atom> out) {
         this.memory.assign("A", new Value(value));
-        this.visitor = new MilanVisitor(System.out, this.memory);
+        this.visitor = out;
+    }
+
+    /**
+     * Injects the ByteArrayOutputStream into the System.out stream.
+     */
+    private void injectBaosIntoSystemOut() {
+        System.setOut(new PrintStream(this.baos));
     }
 
     /**
