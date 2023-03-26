@@ -86,9 +86,7 @@ final class MilanVisitorTest {
     @Test
     void visitsOutputMemorized() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
-        this.memory.assign("A", new Value(42));
-        this.visitor = new MilanVisitor(System.out, this.memory);
+        this.injectBaosAndValue(out, 42);
         this.visitor.visit(
             MilanVisitorTest.parser("output_a.mil").outputStmt()
         );
@@ -123,9 +121,7 @@ final class MilanVisitorTest {
     @Test
     void visitsSimpleIfStatement() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(baos));
-        this.memory.assign("A", new Value(5));
-        this.visitor = new MilanVisitor(System.out, this.memory);
+        this.injectBaosAndValue(baos, 5);
         this.visitor.visit(
             MilanVisitorTest.parser("if_simple.mil").ifStmt()
         );
@@ -137,11 +133,9 @@ final class MilanVisitorTest {
     }
 
     @Test
-    void visitsSimpleIfWithElseStatement() {
+    void visitsSimpleIfElseStatement() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(baos));
-        this.memory.assign("A", new Value(5));
-        this.visitor = new MilanVisitor(System.out, this.memory);
+        this.injectBaosAndValue(baos, 5);
         this.visitor.visit(
             MilanVisitorTest.parser("if_else.mil").ifStmt()
         );
@@ -150,6 +144,20 @@ final class MilanVisitorTest {
             baos.toString(),
             Matchers.equalTo("101\n")
         );
+    }
+
+    /**
+     * It sets the standard output to a ByteArrayOutputStream, assigns a value to
+     * the memory, and creates a new MilanVisitor
+     *
+     * @param baos A ByteArrayOutputStream object that will be used to capture the
+     * output of the program.
+     * @param value The value to be assigned to the variable A.
+     */
+    private void injectBaosAndValue(final ByteArrayOutputStream baos, final int value) {
+        System.setOut(new PrintStream(baos));
+        this.memory.assign("A", new Value(value));
+        this.visitor = new MilanVisitor(System.out, this.memory);
     }
 
     /**
