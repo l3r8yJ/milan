@@ -32,9 +32,11 @@ final class MilanVisitorTest {
 
     private ProgramVisitor<Atom> visitor;
     private final Memory<Atom> memory = new AnnotativeMemory();
+    private ByteArrayOutputStream baos;
 
     @BeforeEach
     void setUp() {
+        this.baos = new ByteArrayOutputStream();
         this.visitor = new MilanVisitor(
             System.in,
             System.out,
@@ -62,15 +64,14 @@ final class MilanVisitorTest {
 
     @Test
     void visitsOutput() {
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
+        System.setOut(new PrintStream(this.baos));
         this.visitor = new MilanVisitor();
         this.visitor.visit(
             MilanVisitorTest.parser("output.mil").outputStmt()
         );
         MatcherAssert.assertThat(
             "Write right output",
-            out.toString(),
+            this.baos.toString(),
             Matchers.equalTo("101\n")
         );
         Assertions.assertThrows(
@@ -85,14 +86,13 @@ final class MilanVisitorTest {
 
     @Test
     void visitsOutputMemorized() {
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        this.injectBaosAndValue(out, 42);
+        this.injectBaosAndValue(42);
         this.visitor.visit(
             MilanVisitorTest.parser("output_a.mil").outputStmt()
         );
         MatcherAssert.assertThat(
             "Write right output",
-            out.toString(),
+            this.baos.toString(),
             Matchers.equalTo("42\n")
         );
     }
@@ -120,42 +120,37 @@ final class MilanVisitorTest {
 
     @Test
     void visitsSimpleIfStatement() {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        this.injectBaosAndValue(baos, 5);
+        this.injectBaosAndValue(5);
         this.visitor.visit(
             MilanVisitorTest.parser("if_simple.mil").ifStmt()
         );
         MatcherAssert.assertThat(
             "Output from IF body is 555",
-            baos.toString(),
+            this.baos.toString(),
             Matchers.equalTo("555\n")
         );
     }
 
     @Test
     void visitsSimpleIfElseStatement() {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        this.injectBaosAndValue(baos, 5);
+        this.injectBaosAndValue(5);
         this.visitor.visit(
             MilanVisitorTest.parser("if_else.mil").ifStmt()
         );
         MatcherAssert.assertThat(
             "Output from ELSE body",
-            baos.toString(),
+            this.baos.toString(),
             Matchers.equalTo("101\n")
         );
     }
 
     /**
-     * It sets the standard output to a ByteArrayOutputStream, assigns a value to
-     * the memory, and creates a new MilanVisitor
+     * Injects the ByteArrayOutputStream and the value into the visitor.
      *
-     * @param baos A ByteArrayOutputStream object that will be used to capture the
-     * output of the program.
      * @param value The value to be assigned to the variable A.
      */
-    private void injectBaosAndValue(final ByteArrayOutputStream baos, final int value) {
-        System.setOut(new PrintStream(baos));
+    private void injectBaosAndValue(final int value) {
+        System.setOut(new PrintStream(this.baos));
         this.memory.assign("A", new Value(value));
         this.visitor = new MilanVisitor(System.out, this.memory);
     }
