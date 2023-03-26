@@ -182,11 +182,11 @@ final class MilanVisitorTest {
      * memory.
      *
      * @param value The value to be assigned to the memory cell A.
-     * @param out The visitor that will be injected with the memory.
+     * @param vis The visitor that will be injected with the memory.
      */
-    private void fillAndInjectMemoryToVisitor(final int value, final ProgramVisitor<Atom> out) {
+    private void fillAndInjectMemoryToVisitor(final int value, final ProgramVisitor<Atom> vis) {
         this.memory.assign("A", new Value(value));
-        this.visitor = out;
+        this.visitor = vis;
     }
 
     /**
