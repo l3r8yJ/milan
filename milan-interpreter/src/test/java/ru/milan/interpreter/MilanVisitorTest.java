@@ -144,6 +144,19 @@ final class MilanVisitorTest {
         );
     }
 
+    @Test
+    void visitsSimpleWhileStatement() {
+        this.injectBaosAndValue(0);
+        this.visitor.visit(
+            MilanVisitorTest.parser("simple_while.mil").whileStmt()
+        );
+        MatcherAssert.assertThat(
+            "Outputs 5 times",
+            this.baos.toString(),
+            Matchers.equalTo("0\n1\n2\n3\n4\n")
+        );
+    }
+
     /**
      * Injects the ByteArrayOutputStream and the value into the visitor.
      *

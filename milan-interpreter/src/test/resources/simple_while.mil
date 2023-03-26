@@ -1,3 +1,4 @@
 WHILE A < 5 DO
     OUTPUT(A);
+    A++;
 ENDDO
