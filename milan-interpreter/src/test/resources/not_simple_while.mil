@@ -1,0 +1,8 @@
+WHILE A < 5 DO
+    A++;
+    B := A;
+    WHILE B > 0 DO
+        OUTPUT(A);
+        B := B - 1;
+    ENDDO
+ENDDO

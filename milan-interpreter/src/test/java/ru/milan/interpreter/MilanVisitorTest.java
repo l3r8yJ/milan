@@ -157,6 +157,21 @@ final class MilanVisitorTest {
         );
     }
 
+    @Test
+    void visitsNotSimpleWhileStatement() {
+        this.injectBaosAndValue(0);
+        this.visitor.visit(
+            MilanVisitorTest.parser("not_simple_while.mil").whileStmt()
+        );
+        MatcherAssert.assertThat(
+            "Outputs 15 times",
+            this.baos.toString(),
+            Matchers.equalTo(
+                "1\n2\n2\n3\n3\n3\n4\n4\n4\n4\n5\n5\n5\n5\n5\n"
+            )
+        );
+    }
+
     /**
      * Injects the ByteArrayOutputStream and the value into the visitor.
      *
