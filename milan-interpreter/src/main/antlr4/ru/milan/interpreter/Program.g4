@@ -6,21 +6,23 @@ block: stmt*;
 
 stmt: assignStmt | readStmt | whileStmt | ifStmt | outputStmt | incrStmt;
 
-assignStmt: ID ASSIGN expr SEMICOLON;
+assignStmt: ID ASSIGN expressions SEMICOLON;
 
-outputStmt: OUTPUT LBRACKET expr RBRACKET SEMICOLON ;
+outputStmt: OUTPUT LBRACKET expressions RBRACKET SEMICOLON ;
 
 readStmt: ASSIGN READ LBRACKET ID RBRACKET SEMICOLON;
 
-whileStmt: WHILE expr DO block ENDDO;
+whileStmt: WHILE expressions DO block ENDDO;
 
-ifStmt: IF expr THEN block (elseStmt)? ENDIF;
+ifStmt: IF expressions THEN block (elseStmt)? ENDIF;
 
 elseStmt: ELSE block;
 
 incrStmt: ID INCR SEMICOLON
         | INCR ID SEMICOLON
         ;
+
+expressions: expr;
 
 expr: ID # Id
     | INT # Int

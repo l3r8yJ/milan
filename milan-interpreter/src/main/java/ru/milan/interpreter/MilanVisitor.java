@@ -148,7 +148,7 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
 
     @Override
     public Atom visitAssignStmt(final ProgramParser.AssignStmtContext ctx) {
-        final Atom value = this.visit(ctx.expr());
+        final Atom value = this.visit(ctx.expressions());
         this.memory.assign(ctx.ID().getText(), value);
         return value;
     }
@@ -230,7 +230,7 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
 
     @Override
     public Atom visitIfStmt(final ProgramParser.IfStmtContext ctx) {
-        final Atom condition = this.visit(ctx.expr());
+        final Atom condition = this.visit(ctx.expressions());
         if (condition.isTrue()) {
             return this.visit(ctx.block());
         }
@@ -242,7 +242,7 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
 
     @Override
     public Atom visitOutputStmt(final ProgramParser.OutputStmtContext ctx) {
-        final Atom value = this.visit(ctx.expr());
+        final Atom value = this.visit(ctx.expressions());
         this.print.println(value.asInteger());
         return value;
     }
@@ -271,10 +271,10 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
 
     @Override
     public Atom visitWhileStmt(final ProgramParser.WhileStmtContext ctx) {
-        Atom condition = this.visit(ctx.expr());
+        Atom condition = this.visit(ctx.expressions());
         while (condition.isTrue()) {
             this.visit(ctx.block());
-            condition = this.visit(ctx.expr());
+            condition = this.visit(ctx.expressions());
         }
         return new Value(0);
     }

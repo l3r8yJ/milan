@@ -14,8 +14,16 @@ import ru.milan.interpreter.exception.AtomNotDefinedException;
 import ru.milan.interpreter.fake.FakeLexer;
 
 /**
- * @todo #28:60m/DEV Test cases Visitor.
- * Create puzzle to test each statements.
+ * @todo #28:60m/DEV Test cases While statement.
+ * Unit tests for while statement.
+ */
+/**
+ * @todo #28:60m/DEV Test cases Visit brackets.
+ * Unit tests for brackets statement.
+ */
+/**
+ * @todo #28:60m/DEV Test cases expressions.
+ * Unit tests for common expressions.
  */
 /**
  * Test case for {@link MilanVisitor}.
