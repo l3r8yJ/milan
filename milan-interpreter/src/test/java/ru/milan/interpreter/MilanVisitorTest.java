@@ -13,6 +13,10 @@ import ru.milan.interpreter.exception.AtomNotDefinedException;
 import ru.milan.interpreter.fake.FakeLexer;
 
 /**
+ * @todo #28:60m/DEV Test cases Visitor.
+ * Create puzzle to test each statements.
+ */
+/**
  * Test case for {@link MilanVisitor}.
  */
 final class MilanVisitorTest {
@@ -29,10 +33,6 @@ final class MilanVisitorTest {
         );
     }
 
-    /**
-     * @todo #18:60m/DEV Find a proper way to test it.
-     * Turn on Disabled test and find way to test it
-     */
     @Test
     void visitsAssign() {
         final Integer atom = this.visitor.visit(
