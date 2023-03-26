@@ -9,7 +9,6 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import ru.milan.interpreter.exception.AtomNotDefinedException;
 import ru.milan.interpreter.fake.FakeLexer;
 
@@ -50,17 +49,12 @@ final class MilanVisitorTest {
     void visitsOutput() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
-        this.visitor = new MilanVisitor(
-            System.in,
-            System.out,
-            System.err,
-            new AnnotativeMemory()
-        );
+        this.visitor = new MilanVisitor();
         this.visitor.visit(
             MilanVisitorTest.parser("output.mil").outputStmt()
         );
         MatcherAssert.assertThat(
-            "Read right output",
+            "Write right output",
             out.toString(),
             Matchers.equalTo("101\n")
         );
@@ -68,9 +62,26 @@ final class MilanVisitorTest {
             AtomNotDefinedException.class,
             () ->
                 this.visitor.visit(
-                    MilanVisitorTest.parser("output_empty.mil").outputStmt()
+                    MilanVisitorTest.parser("output_a.mil").outputStmt()
                 ),
             "Atom {A} is not defined"
+        );
+    }
+
+    @Test
+    void visitOutputMemorized() {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+        final Memory<Atom> memory = new AnnotativeMemory();
+        memory.assign("A", new Value(42));
+        this.visitor = new MilanVisitor(System.out, memory);
+        this.visitor.visit(
+            MilanVisitorTest.parser("output_a.mil").outputStmt()
+        );
+        MatcherAssert.assertThat(
+            "Write right output",
+            out.toString(),
+            Matchers.equalTo("42\n")
         );
     }
 

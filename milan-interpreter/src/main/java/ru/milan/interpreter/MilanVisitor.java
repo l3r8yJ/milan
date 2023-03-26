@@ -18,14 +18,100 @@ import ru.milan.interpreter.exception.WrongTypeException;
  */
 public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
 
+    /**
+     * The input.
+     */
     private final InputStream stdin;
+
+    /**
+     * The output.
+     */
     private final PrintStream stdout;
+
+    /**
+     * Error output.
+     */
     private final PrintStream stderr;
+
+    /**
+     * Runtime memory.
+     */
     private final Memory<Atom> memory;
 
+    /**
+     * Wrapper wor printing.
+     */
     private PrintStream print;
+
+    /**
+     * Wrapper wor input.
+     */
     private BufferedReader input;
 
+    /**
+     * Ctor.
+     */
+    public MilanVisitor() {
+        this(System.in, System.out, System.err, new AnnotativeMemory());
+    }
+
+    /**
+     * Ctor.
+     */
+    public MilanVisitor(final Memory<Atom> memory) {
+        this(System.in, System.out, System.err, memory);
+    }
+
+    /**
+     * Ctor.
+     *
+     * @param stdin Standard input
+     */
+    public MilanVisitor(final InputStream stdin) {
+        this(stdin, System.out, System.err, new AnnotativeMemory());
+    }
+
+    /**
+     * @param out Standard output
+     * @param memory Runtime memory
+     */
+    public MilanVisitor(final PrintStream out, final Memory<Atom> memory) {
+        this(System.in, out, System.err, memory);
+    }
+
+    /**
+     * Ctor.
+     *
+     * @param stdin Standard input
+     * @param stdout Standard output
+     */
+    public MilanVisitor(final InputStream stdin, final PrintStream stdout) {
+        this(stdin, stdout, System.err, new AnnotativeMemory());
+    }
+
+    /**
+     * Ctor.
+     *
+     * @param stdin Standard input
+     * @param stdout Standard output
+     * @param stderr Standard errors
+     */
+    public MilanVisitor(
+        final InputStream stdin,
+        final PrintStream stdout,
+        final PrintStream stderr
+    ) {
+        this(stdin, stdout, stderr, new AnnotativeMemory());
+    }
+
+    /**
+     * Ctor.
+     *
+     * @param stdin Standard input
+     * @param stdout Standard output
+     * @param stderr Standard errors
+     * @param memory Interpretation memory
+     */
     public MilanVisitor(
         final InputStream stdin,
         final PrintStream stdout,
