@@ -6,9 +6,11 @@ import lombok.SneakyThrows;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import ru.milan.interpreter.exception.AtomNotDefinedException;
 import ru.milan.interpreter.fake.FakeLexer;
 
 /**
@@ -47,9 +49,10 @@ final class MilanVisitorTest {
     @Test
     void visitsOutput() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
         this.visitor = new MilanVisitor(
             System.in,
-            new PrintStream(out),
+            System.out,
             System.err,
             new AnnotativeMemory()
         );
@@ -60,6 +63,14 @@ final class MilanVisitorTest {
             "Read right output",
             out.toString(),
             Matchers.equalTo("101\n")
+        );
+        Assertions.assertThrows(
+            AtomNotDefinedException.class,
+            () ->
+                this.visitor.visit(
+                    MilanVisitorTest.parser("output_empty.mil").outputStmt()
+                ),
+            "Atom {A} is not defined"
         );
     }
 
