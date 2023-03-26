@@ -8,6 +8,8 @@ stmt: assignStmt | readStmt | whileStmt | ifStmt | outputStmt | incrStmt;
 
 assignStmt: ID ASSIGN expr SEMICOLON;
 
+outputStmt: OUTPUT LBRACKET expr RBRACKET SEMICOLON ;
+
 readStmt: ID ASSIGN READ LBRACKET expr RBRACKET SEMICOLON;
 
 whileStmt: WHILE expr DO block ENDDO;
@@ -19,8 +21,6 @@ elseStmt: ELSE block;
 incrStmt: ID INCR SEMICOLON
         | INCR ID SEMICOLON
         ;
-
-outputStmt: OUTPUT LBRACKET expr RBRACKET SEMICOLON ;
 
 expr: ID # Id
     | INT # Int

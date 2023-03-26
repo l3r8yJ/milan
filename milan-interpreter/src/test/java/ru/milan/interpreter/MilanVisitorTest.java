@@ -69,7 +69,7 @@ final class MilanVisitorTest {
     }
 
     @Test
-    void visitOutputMemorized() {
+    void visitsOutputMemorized() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
         final Memory<Atom> memory = new AnnotativeMemory();
@@ -82,6 +82,29 @@ final class MilanVisitorTest {
             "Write right output",
             out.toString(),
             Matchers.equalTo("42\n")
+        );
+    }
+
+    @Test
+    void visitsIncrement() {
+        final Memory<Atom> memory = new AnnotativeMemory();
+        memory.assign("A", new Value(10));
+        this.visitor = new MilanVisitor(memory);
+        final Atom pre = this.visitor.visit(
+            MilanVisitorTest.parser("preincrement.mil").incrStmt()
+        );
+        MatcherAssert.assertThat(
+            "pre-incremented value from 10",
+            pre.asInteger(),
+            Matchers.equalTo(11)
+        );
+        final Atom post = this.visitor.visit(
+            MilanVisitorTest.parser("postincrement.mil").incrStmt()
+        );
+        MatcherAssert.assertThat(
+            "pre-incremented value from 11",
+            post.asInteger(),
+            Matchers.equalTo(12)
         );
     }
 
