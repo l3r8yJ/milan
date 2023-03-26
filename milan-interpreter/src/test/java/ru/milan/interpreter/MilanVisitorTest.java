@@ -98,12 +98,11 @@ final class MilanVisitorTest {
             pre.asInteger(),
             Matchers.equalTo(11)
         );
-        final Atom post = this.visitor.visit(
-            MilanVisitorTest.parser("postincrement.mil").incrStmt()
-        );
+        final ProgramParser parsed =
+            MilanVisitorTest.parser("postincrement.mil");
         MatcherAssert.assertThat(
-            "pre-incremented value from 11",
-            post.asInteger(),
+            "post-incremented value from 11",
+            this.visitor.visit(parsed.incrStmt()).asInteger(),
             Matchers.equalTo(12)
         );
     }
