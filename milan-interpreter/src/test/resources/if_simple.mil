@@ -1,0 +1,3 @@
+IF A == 5 THEN
+    OUTPUT(555);
+ENDIF

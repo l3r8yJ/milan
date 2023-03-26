@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import ru.milan.interpreter.fake.FakeLexer;
 final class MilanVisitorTest {
 
     private ProgramVisitor<Atom> visitor;
+    private final Memory<Atom> memory = new AnnotativeMemory();
 
     @BeforeEach
     void setUp() {
@@ -31,6 +33,11 @@ final class MilanVisitorTest {
             System.err,
             new AnnotativeMemory()
         );
+    }
+
+    @AfterEach
+    void tearDown() {
+        this.memory.free();
     }
 
     @Test
@@ -72,9 +79,8 @@ final class MilanVisitorTest {
     void visitsOutputMemorized() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
-        final Memory<Atom> memory = new AnnotativeMemory();
-        memory.assign("A", new Value(42));
-        this.visitor = new MilanVisitor(System.out, memory);
+        this.memory.assign("A", new Value(42));
+        this.visitor = new MilanVisitor(System.out, this.memory);
         this.visitor.visit(
             MilanVisitorTest.parser("output_a.mil").outputStmt()
         );
@@ -87,9 +93,8 @@ final class MilanVisitorTest {
 
     @Test
     void visitsIncrement() {
-        final Memory<Atom> memory = new AnnotativeMemory();
-        memory.assign("A", new Value(10));
-        this.visitor = new MilanVisitor(memory);
+        this.memory.assign("A", new Value(10));
+        this.visitor = new MilanVisitor(this.memory);
         final Atom pre = this.visitor.visit(
             MilanVisitorTest.parser("preincrement.mil").incrStmt()
         );
@@ -104,6 +109,38 @@ final class MilanVisitorTest {
             "post-incremented value from 11",
             this.visitor.visit(parsed.incrStmt()).asInteger(),
             Matchers.equalTo(12)
+        );
+    }
+
+    @Test
+    void visitsSimpleIfStatement() {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(baos));
+        this.memory.assign("A", new Value(5));
+        this.visitor = new MilanVisitor(System.out, this.memory);
+        this.visitor.visit(
+            MilanVisitorTest.parser("if_simple.mil").ifStmt()
+        );
+        MatcherAssert.assertThat(
+            "Output from IF body is 555",
+            baos.toString(),
+            Matchers.equalTo("555\n")
+        );
+    }
+
+    @Test
+    void visitsSimpleIfWithElseStatement() {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(baos));
+        this.memory.assign("A", new Value(5));
+        this.visitor = new MilanVisitor(System.out, this.memory);
+        this.visitor.visit(
+            MilanVisitorTest.parser("if_else.mil").ifStmt()
+        );
+        MatcherAssert.assertThat(
+            "Output from ELSE body",
+            baos.toString(),
+            Matchers.equalTo("101\n")
         );
     }
 
