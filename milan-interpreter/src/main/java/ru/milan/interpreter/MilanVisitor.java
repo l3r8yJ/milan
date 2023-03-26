@@ -11,10 +11,6 @@ import ru.milan.interpreter.exception.WrongTypeException;
 import ru.milan.interpreter.message.FormattedErrorMessage;
 
 /**
- * @todo #5 Write unit tests for MilanVisitor.
- * Write a unit tests for MilanVisitor.
- */
-/**
  * It's a visitor that visits the parse tree and executes the program.
  */
 public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
