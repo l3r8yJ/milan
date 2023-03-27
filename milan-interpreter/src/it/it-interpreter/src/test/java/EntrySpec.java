@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import ru.milan.interpreter.AnnotativeMemory;
 import ru.milan.interpreter.MilanInterpreter;
 
-class EntryTest {
+class EntrySpec {
 
     private MilanInterpreter interpreter;
 
