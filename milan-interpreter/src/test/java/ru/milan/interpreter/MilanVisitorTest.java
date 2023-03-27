@@ -3,7 +3,9 @@ package ru.milan.interpreter;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import lombok.SneakyThrows;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RuleContext;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
@@ -49,7 +51,7 @@ final class MilanVisitorTest {
     @Test
     void visitsAssign() {
         final Integer atom = this.visitor.visit(
-            MilanVisitorTest.parser("assign.mil").assignStmt()
+            MilanVisitorTest.parserFromSource("assign.mil").assignStmt()
         ).asInteger();
         MatcherAssert.assertThat(
             "Read right assign from file",
@@ -63,7 +65,7 @@ final class MilanVisitorTest {
         System.setOut(new PrintStream(this.baos));
         this.visitor = new MilanVisitor();
         this.visitor.visit(
-            MilanVisitorTest.parser("output.mil").outputStmt()
+            MilanVisitorTest.parserFromSource("output.mil").outputStmt()
         );
         MatcherAssert.assertThat(
             "Write right output",
@@ -74,7 +76,7 @@ final class MilanVisitorTest {
             AtomNotDefinedException.class,
             () ->
                 this.visitor.visit(
-                    MilanVisitorTest.parser("output_a.mil").outputStmt()
+                    MilanVisitorTest.parserFromSource("output_a.mil").outputStmt()
                 ),
             "Atom {A} is not defined"
         );
@@ -84,7 +86,7 @@ final class MilanVisitorTest {
     void visitsOutputMemorized() {
         this.injectBaosAndValue(42);
         this.visitor.visit(
-            MilanVisitorTest.parser("output_a.mil").outputStmt()
+            MilanVisitorTest.parserFromSource("output_a.mil").outputStmt()
         );
         MatcherAssert.assertThat(
             "Write right output",
@@ -97,7 +99,7 @@ final class MilanVisitorTest {
     void visitsIncrement() {
         this.fillAndInjectMemoryToVisitor(10, new MilanVisitor(this.memory));
         final Atom pre = this.visitor.visit(
-            MilanVisitorTest.parser("preincrement.mil").incrStmt()
+            MilanVisitorTest.parserFromSource("preincrement.mil").incrStmt()
         );
         MatcherAssert.assertThat(
             "pre-incremented value from 10",
@@ -105,7 +107,7 @@ final class MilanVisitorTest {
             Matchers.equalTo(11)
         );
         final ProgramParser parsed =
-            MilanVisitorTest.parser("postincrement.mil");
+            MilanVisitorTest.parserFromSource("postincrement.mil");
         MatcherAssert.assertThat(
             "post-incremented value from 11",
             this.visitor.visit(parsed.incrStmt()).asInteger(),
@@ -117,7 +119,7 @@ final class MilanVisitorTest {
     void visitsSimpleIfStatement() {
         this.injectBaosAndValue(5);
         this.visitor.visit(
-            MilanVisitorTest.parser("if_simple.mil").ifStmt()
+            MilanVisitorTest.parserFromSource("if_simple.mil").ifStmt()
         );
         MatcherAssert.assertThat(
             "Output from IF body is 555",
@@ -130,7 +132,7 @@ final class MilanVisitorTest {
     void visitsSimpleIfElseStatement() {
         this.injectBaosAndValue(5);
         this.visitor.visit(
-            MilanVisitorTest.parser("if_else.mil").ifStmt()
+            MilanVisitorTest.parserFromSource("if_else.mil").ifStmt()
         );
         MatcherAssert.assertThat(
             "Output from ELSE body",
@@ -143,7 +145,7 @@ final class MilanVisitorTest {
     void visitsSimpleWhileStatement() {
         this.injectBaosAndValue(0);
         this.visitor.visit(
-            MilanVisitorTest.parser("simple_while.mil").whileStmt()
+            MilanVisitorTest.parserFromSource("simple_while.mil").whileStmt()
         );
         MatcherAssert.assertThat(
             "Outputs 5 times",
@@ -156,7 +158,7 @@ final class MilanVisitorTest {
     void visitsNotSimpleWhileStatement() {
         this.injectBaosAndValue(0);
         this.visitor.visit(
-            MilanVisitorTest.parser("not_simple_while.mil").whileStmt()
+            MilanVisitorTest.parserFromSource("not_simple_while.mil").whileStmt()
         );
         MatcherAssert.assertThat(
             "Outputs 15 times",
@@ -165,6 +167,86 @@ final class MilanVisitorTest {
                 "1\n2\n2\n3\n3\n3\n4\n4\n4\n4\n5\n5\n5\n5\n5\n"
             )
         );
+    }
+
+    @Test
+    void visitsMultiplication() {
+        this.injectBaosAndValue(33);
+        final RuleContext mul = MilanVisitorTest.contextFromString("A * 10;");
+        if (mul instanceof ProgramParser.MultiplicationContext ctx) {
+            MatcherAssert.assertThat(
+                "10 * 33 = 3300",
+                new MilanVisitor().visitMultiplication(ctx).asInteger(),
+                Matchers.equalTo(3300)
+            );
+        }
+    }
+
+    @Test
+    void visitsDivision() {
+        this.injectBaosAndValue(10);
+        final RuleContext div = MilanVisitorTest.contextFromString("A / 2;");
+        if (div instanceof ProgramParser.DivisionContext ctx) {
+            MatcherAssert.assertThat(
+                "10 / 2 = 5",
+                new MilanVisitor().visitDivision(ctx).asInteger(),
+                Matchers.equalTo(3300)
+            );
+        }
+    }
+
+    @Test
+    void visitsAddition() {
+        this.injectBaosAndValue(3);
+        final RuleContext add = MilanVisitorTest.contextFromString("10 + A;");
+        if (add instanceof ProgramParser.AdditionContext ctx) {
+            MatcherAssert.assertThat(
+                "10 + 3 = 13",
+                new MilanVisitor().visitAddition(ctx).asInteger(),
+                Matchers.equalTo(13)
+            );
+        }
+    }
+
+    @Test
+    void visitsSubs() {
+        this.injectBaosAndValue(3);
+        final RuleContext sub = MilanVisitorTest.contextFromString("10 - A;");
+        if (sub instanceof ProgramParser.SubtractingContext ctx) {
+            MatcherAssert.assertThat(
+                "10 - 3 = 7",
+                new MilanVisitor().visitSubtracting(ctx).asInteger(),
+                Matchers.equalTo(7)
+            );
+        }
+    }
+
+    @Test
+    void visitsEquals() {
+        this.injectBaosAndValue(3);
+        final RuleContext eqls =
+            MilanVisitorTest.contextFromString("3 == A;");
+        if (eqls instanceof ProgramParser.EqualsContext ctx) {
+            MatcherAssert.assertThat(
+                "3 == 3 is true",
+                new MilanVisitor().visitEquals(ctx),
+                Matchers.is(Value.TRUE)
+            );
+        }
+    }
+
+    @Test
+    void visitsEqualsWithFalse() {
+        this.injectBaosAndValue(3);
+        final RuleContext eqls =
+            MilanVisitorTest.contextFromString("2 == A;");
+        if (eqls instanceof ProgramParser.EqualsContext ctx) {
+            MatcherAssert.assertThat(
+                "2 == 3 is false",
+                new MilanVisitor().visitEquals(ctx),
+                Matchers.is(Value.FALSE)
+            );
+        }
     }
 
     /**
@@ -203,7 +285,22 @@ final class MilanVisitorTest {
      * @return A ProgramParser object.
      */
     @SneakyThrows
-    private static ProgramParser parser(final String resource) {
+    private static ProgramParser parserFromSource(final String resource) {
         return new ProgramParser(new CommonTokenStream(new FakeLexer(resource)));
+    }
+
+    /**
+     * It takes a string of code, and returns a parser that can parse that code
+     *
+     * @param code The code to parse
+     * @return A ProgramParser object.
+     */
+    @SneakyThrows
+    private static RuleContext contextFromString(final String code) {
+        return new ProgramParser(
+            new CommonTokenStream(
+                new MilanLexer(CharStreams.fromString(code))
+            )
+        ).expressions().getRuleContext();
     }
 }
