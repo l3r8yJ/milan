@@ -84,7 +84,7 @@ final class MilanVisitorTest {
 
     @Test
     void visitsOutputMemorized() {
-        this.injectBaosAndValue(42);
+        this.injectAtomAndBaos(42);
         this.visitor.visit(
             MilanVisitorTest.parserFromSource("output_a.mil").outputStmt()
         );
@@ -117,7 +117,7 @@ final class MilanVisitorTest {
 
     @Test
     void visitsSimpleIfStatement() {
-        this.injectBaosAndValue(5);
+        this.injectAtomAndBaos(5);
         this.visitor.visit(
             MilanVisitorTest.parserFromSource("if_simple.mil").ifStmt()
         );
@@ -130,7 +130,7 @@ final class MilanVisitorTest {
 
     @Test
     void visitsSimpleIfElseStatement() {
-        this.injectBaosAndValue(5);
+        this.injectAtomAndBaos(5);
         this.visitor.visit(
             MilanVisitorTest.parserFromSource("if_else.mil").ifStmt()
         );
@@ -143,7 +143,7 @@ final class MilanVisitorTest {
 
     @Test
     void visitsSimpleWhileStatement() {
-        this.injectBaosAndValue(0);
+        this.injectAtomAndBaos(0);
         this.visitor.visit(
             MilanVisitorTest.parserFromSource("simple_while.mil").whileStmt()
         );
@@ -156,7 +156,7 @@ final class MilanVisitorTest {
 
     @Test
     void visitsNotSimpleWhileStatement() {
-        this.injectBaosAndValue(0);
+        this.injectAtomAndBaos(0);
         this.visitor.visit(
             MilanVisitorTest.parserFromSource("not_simple_while.mil").whileStmt()
         );
@@ -171,82 +171,89 @@ final class MilanVisitorTest {
 
     @Test
     void visitsMultiplication() {
-        this.injectBaosAndValue(33);
+        this.injectAtomAndBaos(33);
         final RuleContext mul = MilanVisitorTest.contextFromString("A * 10;");
-        if (mul instanceof ProgramParser.MultiplicationContext ctx) {
-            MatcherAssert.assertThat(
-                "10 * 33 = 3300",
-                new MilanVisitor().visitMultiplication(ctx).asInteger(),
-                Matchers.equalTo(3300)
-            );
-        }
+        MatcherAssert.assertThat(
+            "10 * 33 = 330",
+            this.visitor.visit(mul).asInteger(),
+            Matchers.equalTo(330)
+        );
     }
 
     @Test
     void visitsDivision() {
-        this.injectBaosAndValue(10);
+        this.injectAtomAndBaos(10);
         final RuleContext div = MilanVisitorTest.contextFromString("A / 2;");
-        if (div instanceof ProgramParser.DivisionContext ctx) {
-            MatcherAssert.assertThat(
-                "10 / 2 = 5",
-                new MilanVisitor().visitDivision(ctx).asInteger(),
-                Matchers.equalTo(3300)
-            );
-        }
+        MatcherAssert.assertThat(
+            "10 / 2 = 5",
+            this.visitor.visit(div).asInteger(),
+            Matchers.equalTo(5)
+        );
     }
 
     @Test
     void visitsAddition() {
-        this.injectBaosAndValue(3);
+        this.injectAtomAndBaos(3);
         final RuleContext add = MilanVisitorTest.contextFromString("10 + A;");
-        if (add instanceof ProgramParser.AdditionContext ctx) {
-            MatcherAssert.assertThat(
-                "10 + 3 = 13",
-                new MilanVisitor().visitAddition(ctx).asInteger(),
-                Matchers.equalTo(13)
-            );
-        }
+        MatcherAssert.assertThat(
+            "10 + 3 = 13",
+            this.visitor.visit(add).asInteger(),
+            Matchers.equalTo(13)
+        );
     }
 
     @Test
     void visitsSubs() {
-        this.injectBaosAndValue(3);
+        this.injectAtomAndBaos(3);
         final RuleContext sub = MilanVisitorTest.contextFromString("10 - A;");
-        if (sub instanceof ProgramParser.SubtractingContext ctx) {
-            MatcherAssert.assertThat(
-                "10 - 3 = 7",
-                new MilanVisitor().visitSubtracting(ctx).asInteger(),
-                Matchers.equalTo(7)
-            );
-        }
+        MatcherAssert.assertThat(
+            "10 - 3 = 7",
+            this.visitor.visit(sub).asInteger(),
+            Matchers.equalTo(7)
+        );
     }
 
     @Test
     void visitsEquals() {
-        this.injectBaosAndValue(3);
+        this.injectAtomAndBaos(3);
         final RuleContext eqls =
             MilanVisitorTest.contextFromString("3 == A;");
-        if (eqls instanceof ProgramParser.EqualsContext ctx) {
-            MatcherAssert.assertThat(
-                "3 == 3 is true",
-                new MilanVisitor().visitEquals(ctx),
-                Matchers.is(Value.TRUE)
-            );
-        }
+        MatcherAssert.assertThat(
+            "3 == 3 is true",
+            this.visitor.visit(eqls),
+            Matchers.is(Value.TRUE)
+        );
     }
 
     @Test
     void visitsEqualsWithFalse() {
-        this.injectBaosAndValue(3);
+        this.injectAtomAndBaos(3);
         final RuleContext eqls =
             MilanVisitorTest.contextFromString("2 == A;");
-        if (eqls instanceof ProgramParser.EqualsContext ctx) {
-            MatcherAssert.assertThat(
-                "2 == 3 is false",
-                new MilanVisitor().visitEquals(ctx),
-                Matchers.is(Value.FALSE)
-            );
-        }
+        MatcherAssert.assertThat(
+            "2 == 3 is false",
+            this.visitor.visit(eqls),
+            Matchers.is(Value.FALSE)
+        );
+    }
+
+    @Test
+    void visitsGreaterThan() {
+        this.injectAtomAndBaos(12);
+        final RuleContext gctx =
+            MilanVisitorTest.contextFromString("2 > A;");
+        MatcherAssert.assertThat(
+            "2 > 12 is false",
+            this.visitor.visit(gctx),
+            Matchers.is(Value.FALSE)
+        );
+        final RuleContext gtctx =
+            MilanVisitorTest.contextFromString("12 >= A");
+        MatcherAssert.assertThat(
+            "12 >= 12 is true",
+            this.visitor.visit(gtctx),
+            Matchers.is(Value.TRUE)
+        );
     }
 
     /**
@@ -254,7 +261,7 @@ final class MilanVisitorTest {
      *
      * @param value The value to be assigned to the variable A.
      */
-    private void injectBaosAndValue(final int value) {
+    private void injectAtomAndBaos(final int value) {
         this.injectBaosIntoSystemOut();
         this.fillAndInjectMemoryToVisitor(value, new MilanVisitor(System.out, this.memory));
     }
