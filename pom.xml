@@ -33,6 +33,7 @@ SOFTWARE.
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <antlr4-maven-plugin.version>${antlr4.version}</antlr4-maven-plugin.version>
     <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
+    <maven-invoker-plugin.version>3.4.0</maven-invoker-plugin.version>
     <lombok.version>1.18.26</lombok.version>
     <cactoos.version>0.55.0</cactoos.version>
     <antlr4.version>4.12.0</antlr4.version>
@@ -180,6 +181,24 @@ SOFTWARE.
             <basedir>${project.basedir}</basedir>
           </systemProperties>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-invoker-plugin</artifactId>
+        <version>${maven-invoker-plugin.version}</version>
+        <configuration>
+          <settingsFile>src/it/settings.xml</settingsFile>
+          <postBuildHookScript>verify</postBuildHookScript>
+          <streamLogs>true</streamLogs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>install</goal>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

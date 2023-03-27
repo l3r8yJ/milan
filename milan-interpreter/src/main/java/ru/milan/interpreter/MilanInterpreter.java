@@ -1,6 +1,7 @@
 package ru.milan.interpreter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
 import org.antlr.v4.runtime.ANTLRErrorListener;
@@ -30,10 +31,22 @@ public final class MilanInterpreter {
 
     private final Memory<Atom> memory;
     private final Input input;
+    private final InputStream stdin;
+    private final PrintStream stdout;
+    private final PrintStream stderr;
 
-    public MilanInterpreter(final Memory<Atom> memory, final Input input) {
-        this.memory = new AnnotativeMemory();
+    public MilanInterpreter(
+        final Memory<Atom> memory,
+        final Input input,
+        final InputStream in,
+        final PrintStream out,
+        final PrintStream err
+    ) {
+        this.memory = memory;
         this.input = input;
+        this.stdin = in;
+        this.stdout = new PrintStream(out, true);
+        this.stderr = new PrintStream(err, true);
     }
 
     /**
@@ -52,9 +65,7 @@ public final class MilanInterpreter {
         parser.setErrorHandler(new BailErrorStrategy());
         parser.removeErrorListeners();
         parser.addErrorListener(errors);
-        try (final PrintStream stderr = new PrintStream(System.err, true)) {
-            this.execute(parser, stderr);
-        }
+        this.execute(parser, this.stderr);
     }
 
     /**
@@ -68,10 +79,8 @@ public final class MilanInterpreter {
             this.walkParseTree(parser);
         } catch (final InterpretationException ex) {
             stderr.println(ex.getMessage());
-            throw new IllegalStateException(ex);
         } catch (final ParseCancellationException ex) {
-            MilanInterpreter.formatIfParseCancelled(stderr, ex);
-            throw new IllegalStateException(ex);
+            this.formatIfParseCancelled(ex);
         }
     }
 
@@ -84,9 +93,9 @@ public final class MilanInterpreter {
      */
     private void walkParseTree(final ProgramParser parser) {
         final ParseTreeVisitor<Atom> visitor = new MilanVisitor(
-            System.in,
-            System.out,
-            System.err,
+            this.stdin,
+            this.stdout,
+            this.stderr,
             this.memory
         );
         visitor.visit(parser.prog());
@@ -96,19 +105,17 @@ public final class MilanInterpreter {
      * If the exception is caused by an input mismatch, print the line number and
      * column number of the offending token
      *
-     * @param stderr The stream to write the error message to.
      * @param ex The exception that was thrown.
      */
-    private static void formatIfParseCancelled(
-        final PrintStream stderr,
+    private void formatIfParseCancelled(
         final ParseCancellationException ex
     ) {
         if (ex.getCause() instanceof InputMismatchException cause) {
-            stderr.println(
+            this.stderr.println(
                 new FormattedErrorMessage(
                     cause.getOffendingToken().getLine(),
                     cause.getOffendingToken().getCharPositionInLine(),
-                    "Syntax error: ".concat(cause.getMessage())
+                    "Syntax error: " + cause.getMessage()
                 )
             );
         }
