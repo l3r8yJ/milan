@@ -128,9 +128,9 @@ public abstract class AtomEnvelope implements Atom {
 
     @Override
     public final Atom neq(final Atom other) {
-        Atom result = Value.FALSE;
+        Atom result = Value.TRUE;
         if (this.eq(other).equals(Value.TRUE)) {
-            result = Value.TRUE;
+            result = Value.FALSE;
         }
         return result;
     }

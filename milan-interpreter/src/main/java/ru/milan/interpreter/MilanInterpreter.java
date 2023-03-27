@@ -127,6 +127,11 @@ public final class MilanInterpreter {
         );
     }
 
+    /**
+     * "Split the input text into lines, and return the lines as a list of text."
+     *
+     * @return A list of lines.
+     */
     private List<Text> lines() {
         return new ListOf<>(new Split(new TextOf(this.input), "\r?\n"));
     }
