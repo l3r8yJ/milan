@@ -10,7 +10,7 @@ assignStmt: ID ASSIGN expressions SEMICOLON;
 
 outputStmt: OUTPUT LBRACKET expressions RBRACKET SEMICOLON ;
 
-readStmt: ASSIGN READ LBRACKET ID RBRACKET SEMICOLON;
+readStmt: READ LBRACKET ID RBRACKET SEMICOLON;
 
 whileStmt: WHILE expressions DO block ENDDO;
 
@@ -70,8 +70,8 @@ ADD: '+';
 DIV: '/';
 MUL: '*';
 
-ID: [a-zA-Z]+;
 INT: [0-9]+;
+ID: [a-zA-Z0-9]+;
 BOOL: 'true'
     | 'false'
     ;
