@@ -31,7 +31,7 @@ Current version of Milan grammar supports expressions like:
 BEGIN
     next := 1;
     rng := (1 + (2 * (3)));
-    c1 := READ;
+    READ(c1);
     c2 := c1;
     WHILE next == 1 DO
         c1 := c1 / (10 + 2);
@@ -49,4 +49,5 @@ BEGIN
     ENDIF
     OUTPUT(rng);
 END
+
 ```
