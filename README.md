@@ -18,7 +18,7 @@ Current version of language – **JVM** based.
 | Keywords             | `BEGIN` `DO` `ELSE` `END` `ENDDO` `ENDIF` `IF` `OUTPUT` `READ` `THEN` `WHILE` |
 | Operands             | `+` `++` `-` `*` `/` `=` `>` `<` `<=` `>=` `<>`                               |
 | Numbers              | `[0-9]`                                                                       |
-| Letters              | `[a-zA-Z0-9]`                                                                 |
+| Letters              | `[a-zA-Z]`                                                                    |
 | Assignment character | `:=`                                                                          |
 | Separator            | `;`                                                                           |
 | Comments             | `//`                                                                          |
