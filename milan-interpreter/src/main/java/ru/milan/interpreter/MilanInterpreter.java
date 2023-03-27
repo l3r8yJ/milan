@@ -103,13 +103,11 @@ public final class MilanInterpreter {
         final PrintStream stderr,
         final ParseCancellationException ex
     ) {
-        if (ex.getCause() instanceof InputMismatchException) {
-            final InputMismatchException exc =
-                InputMismatchException.class.cast(ex.getCause());
+        if (ex.getCause() instanceof InputMismatchException cause) {
             stderr.println(
                 new FormattedErrorMessage(
-                    exc.getOffendingToken().getLine(),
-                    exc.getOffendingToken().getCharPositionInLine(),
+                    cause.getOffendingToken().getLine(),
+                    cause.getOffendingToken().getCharPositionInLine(),
                     "Syntax error"
                 )
             );
