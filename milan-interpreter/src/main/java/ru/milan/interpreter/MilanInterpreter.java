@@ -108,7 +108,7 @@ public final class MilanInterpreter {
                 new FormattedErrorMessage(
                     cause.getOffendingToken().getLine(),
                     cause.getOffendingToken().getCharPositionInLine(),
-                    "Syntax error"
+                    "Syntax error: ".concat(cause.getMessage())
                 )
             );
         }
