@@ -85,8 +85,8 @@ public final class MilanInterpreter {
     private void walkParseTree(final ProgramParser parser) {
         final ParseTreeVisitor<Atom> visitor = new MilanVisitor(
             System.in,
-            new PrintStream(System.out),
-            new PrintStream(System.err),
+            System.out,
+            System.err,
             this.memory
         );
         visitor.visit(parser.prog());
