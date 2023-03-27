@@ -20,10 +20,6 @@ import ru.milan.interpreter.fake.FakeLexer;
  * Unit tests for brackets statement.
  */
 /**
- * @todo #28:60m/DEV Test cases expressions.
- * Unit tests for common expressions.
- */
-/**
  * Test case for {@link MilanVisitor}.
  */
 final class MilanVisitorTest {
@@ -216,11 +212,11 @@ final class MilanVisitorTest {
     @Test
     void visitsEquals() {
         this.injectAtomAndBaos(3);
-        final RuleContext eqls =
+        final RuleContext equals =
             MilanVisitorTest.contextFromString("3 == A;");
         MatcherAssert.assertThat(
             "3 == 3 is true",
-            this.visitor.visit(eqls),
+            this.visitor.visit(equals),
             Matchers.is(Value.TRUE)
         );
     }
@@ -228,11 +224,11 @@ final class MilanVisitorTest {
     @Test
     void visitsEqualsWithFalse() {
         this.injectAtomAndBaos(3);
-        final RuleContext eqls =
+        final RuleContext equals =
             MilanVisitorTest.contextFromString("2 == A;");
         MatcherAssert.assertThat(
             "2 == 3 is false",
-            this.visitor.visit(eqls),
+            this.visitor.visit(equals),
             Matchers.is(Value.FALSE)
         );
     }
@@ -240,19 +236,57 @@ final class MilanVisitorTest {
     @Test
     void visitsGreaterThan() {
         this.injectAtomAndBaos(12);
-        final RuleContext gctx =
+        final RuleContext greaterContext =
             MilanVisitorTest.contextFromString("2 > A;");
         MatcherAssert.assertThat(
             "2 > 12 is false",
-            this.visitor.visit(gctx),
+            this.visitor.visit(greaterContext),
             Matchers.is(Value.FALSE)
         );
-        final RuleContext gtctx =
+        final RuleContext greaterEqualsContext =
             MilanVisitorTest.contextFromString("12 >= A");
         MatcherAssert.assertThat(
             "12 >= 12 is true",
-            this.visitor.visit(gtctx),
+            this.visitor.visit(greaterEqualsContext),
             Matchers.is(Value.TRUE)
+        );
+    }
+
+    @Test
+    void visitsLessThan() {
+        this.injectAtomAndBaos(10);
+        final RuleContext lessContext =
+            MilanVisitorTest.contextFromString("5 < A");
+        MatcherAssert.assertThat(
+            "5 < 10 is true",
+            this.visitor.visit(lessContext),
+            Matchers.equalTo(Value.TRUE)
+        );
+        final RuleContext lessEqualsContext =
+            MilanVisitorTest.contextFromString("5 <= A");
+        MatcherAssert.assertThat(
+            "5 <= 10 is true",
+            this.visitor.visit(lessEqualsContext),
+            Matchers.equalTo(Value.TRUE)
+        );
+    }
+
+    @Test
+    void visitsNotEquals() {
+        this.injectAtomAndBaos(2);
+        final RuleContext notEqualsContext =
+            MilanVisitorTest.contextFromString("1 <> A");
+        MatcherAssert.assertThat(
+            "1 != 2 is true",
+            this.visitor.visit(notEqualsContext),
+            Matchers.equalTo(Value.TRUE)
+        );
+        final RuleContext twoNotEqualsTwo =
+            MilanVisitorTest.contextFromString("2 <> A");
+        MatcherAssert.assertThat(
+            "2 != 2 is false",
+            this.visitor.visit(twoNotEqualsTwo),
+            Matchers.equalTo(Value.FALSE)
         );
     }
 
