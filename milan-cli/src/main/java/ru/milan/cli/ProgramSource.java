@@ -35,12 +35,7 @@ public class ProgramSource implements Callable<Integer> {
             );
             interpreter.run();
         } catch (final RuntimeException ex) {
-            System.out.println(
-                new FormattedText(
-                    "Error executing the program: %s",
-                    ex.getMessage()
-                ).toString()
-            );
+            System.out.printf("Error executing the program: %s%n", ex.getMessage());
             System.exit(-1);
         }
         return 0;

@@ -17,7 +17,7 @@ public final class AnnotativeMemory implements Memory<Atom> {
         final Atom atom = this.memory.get(name);
         if (null == atom) {
             throw new AtomNotDefinedException(
-                new FormattedText("Atom {%s} is not defined!", name)
+                "Atom {%s} is not defined!".formatted(name)
             );
         }
         return atom;

@@ -137,10 +137,7 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
                 new FormattedErrorMessage(
                     ctx.getStart().getLine(),
                     ctx.getStart().getCharPositionInLine(),
-                    new FormattedText(
-                        "Interpretation error: %s\n",
-                        ex.getMessage()
-                    ).toString()
+                    "Interpretation error: %s\n".formatted(ex.getMessage())
                 ).asString(),
                 ex
             );
@@ -249,10 +246,7 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
             throw new InterpretationException(
                 ctx.getStart().getLine(),
                 ctx.getStart().getCharPositionInLine(),
-                new FormattedText(
-                    "Error while interpretation: '%s'\n",
-                    ex.getMessage()
-                ).toString(),
+                "Error while interpretation: '%s'\n".formatted(ex.getMessage()),
                 ex
             );
         }

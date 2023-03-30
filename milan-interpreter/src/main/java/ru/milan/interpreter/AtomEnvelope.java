@@ -159,10 +159,8 @@ public abstract class AtomEnvelope implements Atom {
     public final void assertNumber() {
         if (!this.isNumber()) {
             throw new WrongTypeException(
-                new FormattedText(
-                    "Couldn't evaluate numeric expression '%s' – not a number",
-                    this.value.toString()
-                ).toString()
+                "Couldn't evaluate numeric expression '%s' – not a number"
+                    .formatted(this.value)
             );
         }
     }

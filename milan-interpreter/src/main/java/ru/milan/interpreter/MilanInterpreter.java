@@ -124,10 +124,7 @@ public final class MilanInterpreter {
      * @return UNIX formatted text.
      */
     private Text unixize() {
-        return new FormattedText(
-            "%s\n",
-            new Joined(new TextOf("\n"), this.lines())
-        );
+        return new Joined(new TextOf("\n"), this.lines());
     }
 
     /**

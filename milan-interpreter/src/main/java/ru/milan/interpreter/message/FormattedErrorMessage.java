@@ -16,11 +16,8 @@ public final class FormattedErrorMessage implements Text {
 
     @Override
     public String asString() {
-        return new FormattedText(
-            "Error at [%d, %d]: %s\n",
-            this.line,
-            this.pos,
-            this.message
-        ).toString();
+        return "Error at [%d, %d]: %s\n".formatted(
+            this.line, this.pos, this.message
+        );
     }
 }
