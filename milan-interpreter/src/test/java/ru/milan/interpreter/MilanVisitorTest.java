@@ -295,12 +295,12 @@ final class MilanVisitorTest {
     void visitsBrackets() {
         this.injectAtomAndBaos(10);
         final Integer result = this.visitor.visit(
-            MilanVisitorTest.contextFromString("(A + 5) * (A - 8)")
+            MilanVisitorTest.contextFromString("(A + 5) * (A - 8) / (1 + 1)")
         ).asInteger();
         MatcherAssert.assertThat(
             "15 * 2 = 30",
             result,
-            Matchers.equalTo(30)
+            Matchers.equalTo(15)
         );
     }
 
