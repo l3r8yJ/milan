@@ -17,10 +17,6 @@ import ru.milan.interpreter.exception.AtomNotDefinedException;
 import ru.milan.interpreter.fake.FakeLexer;
 
 /**
- * @todo #28:60m/DEV Test cases Visit brackets.
- * Unit tests for brackets statement.
- */
-/**
  * Test case for {@link MilanVisitor}.
  */
 final class MilanVisitorTest {

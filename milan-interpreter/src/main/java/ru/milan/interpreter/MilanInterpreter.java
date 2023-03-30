@@ -21,10 +21,6 @@ import ru.milan.interpreter.exception.InterpretationException;
 import ru.milan.interpreter.message.FormattedErrorMessage;
 
 /**
- * @todo #5 Unit tests for Interpreter.
- * We have to write unit tests for Interpreter.
- */
-/**
  * It reads the input file, creates a lexer and a interpreter, and executes the interpreter
  */
 public final class MilanInterpreter {
