@@ -58,20 +58,6 @@ final class MilanVisitorTest {
     }
 
     @Test
-    @Disabled
-    void visitsHardAssign() {
-        this.injectAtomAndBaos(10);
-        final Integer value = this.visitor.visit(
-            MilanVisitorTest.contextFromString("B := (A + 5) * (A - 8);")
-        ).asInteger();
-        MatcherAssert.assertThat(
-            "Read complex assign",
-            30,
-            Matchers.equalTo(value)
-        );
-    }
-
-    @Test
     void visitsOutput() {
         System.setOut(new PrintStream(this.baos));
         this.visitor = new MilanVisitor();
