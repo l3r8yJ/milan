@@ -24,6 +24,10 @@ Current version of language – **JVM** based.
 | Comments             | `//`                                                                          |
 | Construction         | `(` `)`                                                                       |
 
+## Demo
+
+![demo](https://user-images.githubusercontent.com/46355873/228844342-2179df20-9dd1-4354-a392-fbdfd29c9c03.gif)
+
 ## Progress
 
 Current version of Milan grammar supports expressions like:
