@@ -11,6 +11,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.milan.interpreter.exception.AtomNotDefinedException;
 import ru.milan.interpreter.fake.FakeLexer;
@@ -53,6 +54,20 @@ final class MilanVisitorTest {
             "Read right assign from file",
             321,
             Matchers.equalTo(atom)
+        );
+    }
+
+    @Test
+    @Disabled
+    void visitsHardAssign() {
+        this.injectAtomAndBaos(10);
+        final Integer value = this.visitor.visit(
+            MilanVisitorTest.contextFromString("B := (A + 5) * (A - 8);")
+        ).asInteger();
+        MatcherAssert.assertThat(
+            "Read complex assign",
+            30,
+            Matchers.equalTo(value)
         );
     }
 
@@ -287,6 +302,19 @@ final class MilanVisitorTest {
             "2 != 2 is false",
             this.visitor.visit(twoNotEqualsTwo),
             Matchers.equalTo(Value.FALSE)
+        );
+    }
+
+    @Test
+    void visitsBrackets() {
+        this.injectAtomAndBaos(10);
+        final Integer result = this.visitor.visit(
+            MilanVisitorTest.contextFromString("(A + 5) * (A - 8)")
+        ).asInteger();
+        MatcherAssert.assertThat(
+            "15 * 2 = 30",
+            result,
+            Matchers.equalTo(30)
         );
     }
 

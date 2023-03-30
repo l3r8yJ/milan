@@ -126,6 +126,11 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
     public Atom visitProg(final ProgramParser.ProgContext ctx) {
         this.init();
         try {
+            ctx.children.forEach(tkn -> {
+                if (tkn instanceof ProgramParser.AssignStmtContext ass) {
+                    this.visitAssignStmt(ass);
+                }
+            });
             return super.visitProg(ctx);
         } finally {
             this.shutdown();
@@ -155,6 +160,23 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
         final Atom increment = this.memory.get(name).add(new Value(1));
         this.memory.assign(name, increment);
         return increment;
+    }
+
+    @Override
+    public Atom visitBrackets(final ProgramParser.BracketsContext ctx) {
+        final Atom result;
+        if (ctx.expr() instanceof ProgramParser.AdditionContext addition) {
+            result = this.visitAddition(addition);
+        } else if (ctx.expr() instanceof ProgramParser.MultiplicationContext mult) {
+            result = this.visitMultiplication(mult);
+        } else if (ctx.expr() instanceof ProgramParser.SubtractingContext sub) {
+            result = this.visitSubtracting(sub);
+        } else if (ctx.expr() instanceof ProgramParser.DivisionContext div) {
+            result = this.visitDivision(div);
+        } else {
+            result = super.visitBrackets(ctx);
+        }
+        return result;
     }
 
     @Override
@@ -211,7 +233,7 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
     public Atom visitStmt(final ProgramParser.StmtContext ctx) {
         try {
             return super.visitStmt(ctx);
-        } catch (final WrongTypeException ex) {
+        } catch (final RuntimeException ex) {
             throw new InterpretationException(
                 ctx.getStart().getLine(),
                 ctx.getStart().getCharPositionInLine(),
