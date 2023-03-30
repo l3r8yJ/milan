@@ -127,11 +127,23 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
         this.init();
         try {
             ctx.children.forEach(tkn -> {
-                if (tkn instanceof ProgramParser.AssignStmtContext ass) {
+                if (tkn instanceof final ProgramParser.AssignStmtContext ass) {
                     this.visitAssignStmt(ass);
                 }
             });
             return super.visitProg(ctx);
+        } catch (final RuntimeException ex) {
+            throw new IllegalStateException(
+                new FormattedErrorMessage(
+                    ctx.getStart().getLine(),
+                    ctx.getStart().getCharPositionInLine(),
+                    new FormattedText(
+                        "Interpretation error: %s\n",
+                        ex.getMessage()
+                    ).toString()
+                ).asString(),
+                ex
+            );
         } finally {
             this.shutdown();
         }

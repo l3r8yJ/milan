@@ -112,7 +112,7 @@ public final class MilanInterpreter {
                     cause.getOffendingToken().getLine(),
                     cause.getOffendingToken().getCharPositionInLine(),
                     "Syntax error: " + cause.getMessage()
-                )
+                ).asString()
             );
         }
     }

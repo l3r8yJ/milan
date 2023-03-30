@@ -21,7 +21,7 @@ public class ProgramSource implements Callable<Integer> {
         index = "0",
         description = "Path to source file"
     )
-    File source;
+    private File source;
 
     @Override
     public Integer call() throws Exception {
@@ -39,7 +39,7 @@ public class ProgramSource implements Callable<Integer> {
                 new FormattedText(
                     "Error executing the program: %s",
                     ex.getMessage()
-                )
+                ).toString()
             );
             System.exit(-1);
         }
