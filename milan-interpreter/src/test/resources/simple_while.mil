@@ -1,4 +1,4 @@
 WHILE A < 5 DO
     OUTPUT(A);
-    A++;
+    A = A + 1;
 ENDDO

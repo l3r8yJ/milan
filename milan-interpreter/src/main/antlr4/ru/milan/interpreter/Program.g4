@@ -4,28 +4,23 @@ prog: BEGIN block END;
 
 block: stmt*;
 
-stmt: assignStmt | readStmt | whileStmt | ifStmt | outputStmt | incrStmt;
+stmt: assignStmt | whileStmt | ifStmt | outputStmt;
 
 assignStmt: ID ASSIGN expressions SEMICOLON;
 
 outputStmt: OUTPUT LBRACKET expressions RBRACKET SEMICOLON ;
 
-readStmt: READ LBRACKET ID RBRACKET SEMICOLON;
+whileStmt: WHILE expressions DO block ENDDO SEMICOLON;
 
-whileStmt: WHILE expressions DO block ENDDO;
-
-ifStmt: IF expressions THEN block (elseStmt)? ENDIF;
+ifStmt: IF expressions THEN block (elseStmt)? ENDIF SEMICOLON;
 
 elseStmt: ELSE block;
 
-incrStmt: ID INCR SEMICOLON
-        | INCR ID SEMICOLON
-        ;
-
 expressions: expr;
 
-expr: ID # Id
-    | INT # Int
+expr: ID                     # Id
+    | INT                    # Int
+    | READ                   # Read
     | expr MUL expr          # Multiplication
     | expr DIV expr          # Division
     | expr ADD expr          # Addition
@@ -55,8 +50,6 @@ ASSIGN: ':=';
 SEMICOLON: ';';
 LBRACKET: '(';
 RBRACKET: ')';
-INCR: '++';
-COMMENT: '//' .*? '\r'? '\n' -> skip;
 
 LTE: '<=';
 GTE: '>=';
@@ -72,8 +65,5 @@ MUL: '*';
 
 INT: [0-9]+;
 ID: [a-zA-Z0-9]+;
-BOOL: 'true'
-    | 'false'
-    ;
 
 WS: [ \t\r\n]+ -> skip;

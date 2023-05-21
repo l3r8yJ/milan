@@ -1,5 +1,5 @@
 WHILE A < 5 DO
-    A++;
+    A := A + 1;
     B := A;
     WHILE B > 0 DO
         OUTPUT(A);

@@ -16,7 +16,7 @@ public final class FormattedErrorMessage implements Text {
 
     @Override
     public String asString() {
-        return "Error at [%d, %d]: %s\n".formatted(
+        return "Error at [%d, %d]:\n\t%s".formatted(
             this.line, this.pos, this.message
         );
     }
