@@ -8,11 +8,11 @@ stmt: assignStmt | whileStmt | ifStmt | outputStmt;
 
 assignStmt: ID ASSIGN expressions;
 
-outputStmt: OUTPUT LBRACKET expressions RBRACKET;
-
 whileStmt: WHILE expressions DO block ENDDO;
 
 ifStmt: IF expressions THEN block (elseStmt)? ENDIF;
+
+outputStmt: OUTPUT LBRACKET expressions RBRACKET;
 
 elseStmt: ELSE block;
 
