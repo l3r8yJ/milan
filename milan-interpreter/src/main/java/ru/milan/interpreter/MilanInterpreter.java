@@ -4,16 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
-import org.antlr.v4.runtime.ANTLRErrorListener;
-import org.antlr.v4.runtime.BailErrorStrategy;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.InputMismatchException;
+
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.cactoos.Input;
 import org.cactoos.Text;
 import org.cactoos.list.ListOf;
-import org.cactoos.text.FormattedText;
 import org.cactoos.text.Joined;
 import org.cactoos.text.Split;
 import org.cactoos.text.TextOf;
@@ -51,7 +48,7 @@ public final class MilanInterpreter {
      */
     public void run() throws IOException {
         final List<Text> lines = this.lines();
-        final ANTLRErrorListener errors = new ErrorListener(lines);
+        final ANTLRErrorListener errors = new MilanErrorListener(lines);
         final ProgramLexer lexer = new MilanLexer(this.unixize());
         lexer.removeErrorListeners();
         lexer.addErrorListener(errors);
@@ -106,13 +103,15 @@ public final class MilanInterpreter {
     private void formatIfParseCancelled(
         final ParseCancellationException ex
     ) {
+        System.out.println(ex.getMessage());
         if (ex.getCause() instanceof InputMismatchException cause) {
+            final Token off = cause.getOffendingToken();
             this.stderr.println(
                 new FormattedErrorMessage(
-                    cause.getOffendingToken().getLine(),
-                    cause.getOffendingToken().getCharPositionInLine(),
+                    off.getLine(),
+                    off.getCharPositionInLine(),
                     "Syntax error: %s not expected"
-                        .formatted(cause.getOffendingToken().getText())
+                        .formatted(off.getText())
                 ).asString()
             );
         }

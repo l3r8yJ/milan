@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.Scanner;
+
 import org.cactoos.text.FormattedText;
 import ru.milan.interpreter.exception.InterpretationException;
 import ru.milan.interpreter.exception.WrongTypeException;
@@ -164,11 +166,10 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
     }
 
     @Override
-    public Atom visitIncrStmt(final ProgramParser.IncrStmtContext ctx) {
-        final String name = ctx.ID().getText();
-        final Atom increment = this.memory.get(name).add(new Value(1));
-        this.memory.assign(name, increment);
-        return increment;
+    public Atom visitRead(final ProgramParser.ReadContext ctx) {
+        try (final Scanner scan = new Scanner(System.in)) {
+            return new Value(scan.nextInt());
+        }
     }
 
     @Override
@@ -269,28 +270,6 @@ public final class MilanVisitor extends ProgramBaseVisitor<Atom> {
         final Atom value = this.visit(ctx.expressions());
         this.print.println(value.asInteger());
         return value;
-    }
-
-    @Override
-    public Atom visitReadStmt(final ProgramParser.ReadStmtContext ctx) {
-        final String name = ctx.ID().getText();
-        try {
-            final String line = this.input.readLine();
-            final Atom value = new Value(Integer.valueOf(line));
-            this.memory.assign(name, value);
-            return value;
-        } catch (final NumberFormatException ex) {
-            throw new WrongTypeException(
-                new FormattedErrorMessage(
-                    ctx.getStart().getLine(),
-                    ctx.getStart().getCharPositionInLine(),
-                    String.format("Atom {%s} isn't integer", name)
-                ).asString(),
-                ex
-            );
-        } catch (final IOException ex) {
-            throw new IllegalStateException(ex);
-        }
     }
 
     @Override

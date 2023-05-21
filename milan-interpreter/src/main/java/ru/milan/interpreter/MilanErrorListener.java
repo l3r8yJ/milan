@@ -1,16 +1,19 @@
 package ru.milan.interpreter;
 
+import java.util.BitSet;
 import java.util.InputMismatchException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.antlr.v4.runtime.atn.ATNConfigSet;
+import org.antlr.v4.runtime.dfa.DFA;
 import org.cactoos.Text;
 
 @RequiredArgsConstructor
-public final class ErrorListener extends BaseErrorListener {
+public final class MilanErrorListener extends BaseErrorListener {
 
     private final List<Text> lines;
 
@@ -31,5 +34,4 @@ public final class ErrorListener extends BaseErrorListener {
                 )
         );
     }
-
 }

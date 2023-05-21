@@ -88,26 +88,6 @@ final class MilanVisitorTest {
     }
 
     @Test
-    void visitsIncrement() {
-        this.fillAndInjectMemoryToVisitor(10, new MilanVisitor(this.memory));
-        final Atom pre = this.visitor.visit(
-            MilanVisitorTest.parserFromSource("preincrement.mil").incrStmt()
-        );
-        MatcherAssert.assertThat(
-            "pre-incremented value from 10",
-            pre.asInteger(),
-            Matchers.equalTo(11)
-        );
-        final ProgramParser parsed =
-            MilanVisitorTest.parserFromSource("postincrement.mil");
-        MatcherAssert.assertThat(
-            "post-incremented value from 11",
-            this.visitor.visit(parsed.incrStmt()).asInteger(),
-            Matchers.equalTo(12)
-        );
-    }
-
-    @Test
     void visitsSimpleIfStatement() {
         this.injectAtomAndBaos(5);
         this.visitor.visit(

@@ -4,14 +4,13 @@ BEGIN
         b1 := (a1 / 2) * 2;
         OUTPUT(b1);
         IF a1 == 9 THEN
-            // спуск
             WHILE b1 <> 1 DO
                 OUTPUT(b1);
                 b1 := b1 - 1;
-            ENDDO
-        ENDIF
-        a1++;
-    ENDDO
+            ENDDO;
+        ENDIF;
+        a1 := a1 + 1;
+    ENDDO;
     OUTPUT(a1);
     OUTPUT(b1);
     c101 := (a1 - 30) * (b1 + 2);
