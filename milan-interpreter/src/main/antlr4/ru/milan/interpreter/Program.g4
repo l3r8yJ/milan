@@ -65,8 +65,5 @@ MUL: '*';
 
 INT: [0-9]+;
 ID: [a-zA-Z0-9]+;
-BOOL: 'true'
-    | 'false'
-    ;
 
 WS: [ \t\r\n]+ -> skip;
