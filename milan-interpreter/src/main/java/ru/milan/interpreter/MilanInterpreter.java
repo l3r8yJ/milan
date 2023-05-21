@@ -111,7 +111,8 @@ public final class MilanInterpreter {
                 new FormattedErrorMessage(
                     cause.getOffendingToken().getLine(),
                     cause.getOffendingToken().getCharPositionInLine(),
-                    "Syntax error: " + cause.getMessage()
+                    "Syntax error: %s not expected"
+                        .formatted(cause.getOffendingToken().getText())
                 ).asString()
             );
         }
