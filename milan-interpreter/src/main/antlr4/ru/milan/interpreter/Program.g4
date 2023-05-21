@@ -2,17 +2,17 @@ grammar Program;
 
 prog: BEGIN block END;
 
-block: stmt*;
+block: (stmt SEMICOLON)*;
 
 stmt: assignStmt | whileStmt | ifStmt | outputStmt;
 
-assignStmt: ID ASSIGN expressions SEMICOLON;
+assignStmt: ID ASSIGN expressions;
 
-outputStmt: OUTPUT LBRACKET expressions RBRACKET SEMICOLON ;
+outputStmt: OUTPUT LBRACKET expressions RBRACKET;
 
-whileStmt: WHILE expressions DO block ENDDO SEMICOLON;
+whileStmt: WHILE expressions DO block ENDDO;
 
-ifStmt: IF expressions THEN block (elseStmt)? ENDIF SEMICOLON;
+ifStmt: IF expressions THEN block (elseStmt)? ENDIF;
 
 elseStmt: ELSE block;
 
@@ -64,6 +64,7 @@ DIV: '/';
 MUL: '*';
 
 INT: [0-9]+;
+
 ID: [a-zA-Z0-9]+;
 
 WS: [ \t\r\n]+ -> skip;
