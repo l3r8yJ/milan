@@ -1,16 +1,13 @@
 package ru.milan.interpreter;
 
+import ru.milan.interpreter.exception.InterpretationException;
+import ru.milan.interpreter.message.FormattedErrorMessage;
+
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Scanner;
-
-import org.cactoos.text.FormattedText;
-import ru.milan.interpreter.exception.InterpretationException;
-import ru.milan.interpreter.exception.WrongTypeException;
-import ru.milan.interpreter.message.FormattedErrorMessage;
 
 /**
  * It's a visitor that visits the parse tree and executes the program.
