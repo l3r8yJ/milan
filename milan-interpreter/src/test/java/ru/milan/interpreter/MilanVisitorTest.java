@@ -12,6 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.l3r8y.UnixizedOf;
 import ru.milan.interpreter.exception.AtomNotDefinedException;
 import ru.milan.interpreter.fake.FakeLexer;
 
@@ -53,7 +54,7 @@ final class MilanVisitorTest {
     }
 
     @Test
-    void visitsOutput() {
+    void visitsOutput() throws Exception {
         System.setOut(new PrintStream(this.baos));
         this.visitor = new MilanVisitor();
         this.visitor.visit(
@@ -61,8 +62,10 @@ final class MilanVisitorTest {
         );
         MatcherAssert.assertThat(
             "Write right output",
-            this.baos.toString(),
-            Matchers.equalTo("101\n")
+            new UnixizedOf(this.baos.toString())
+                .asText()
+                .asString(),
+            Matchers.equalTo("101")
         );
         Assertions.assertThrows(
             AtomNotDefinedException.class,
@@ -75,68 +78,78 @@ final class MilanVisitorTest {
     }
 
     @Test
-    void visitsOutputMemorized() {
+    void visitsOutputMemorized() throws Exception {
         this.injectAtomAndBaos(42);
         this.visitor.visit(
             MilanVisitorTest.parserFromSource("output_a.mil").outputStmt()
         );
         MatcherAssert.assertThat(
             "Write right output",
-            this.baos.toString(),
-            Matchers.equalTo("42\n")
+            new UnixizedOf(this.baos.toString())
+                .asText()
+                .asString(),
+            Matchers.equalTo("42")
         );
     }
 
     @Test
-    void visitsSimpleIfStatement() {
+    void visitsSimpleIfStatement() throws Exception {
         this.injectAtomAndBaos(5);
         this.visitor.visit(
             MilanVisitorTest.parserFromSource("if_simple.mil").ifStmt()
         );
         MatcherAssert.assertThat(
             "Output from IF body is 555",
-            this.baos.toString(),
-            Matchers.equalTo("555\n")
+            new UnixizedOf(this.baos.toString())
+                .asText()
+                .asString(),
+            Matchers.equalTo("555")
         );
     }
 
     @Test
-    void visitsSimpleIfElseStatement() {
+    void visitsSimpleIfElseStatement() throws Exception {
         this.injectAtomAndBaos(5);
         this.visitor.visit(
             MilanVisitorTest.parserFromSource("if_else.mil").ifStmt()
         );
         MatcherAssert.assertThat(
             "Output from ELSE body",
-            this.baos.toString(),
-            Matchers.equalTo("101\n")
+            new UnixizedOf(this.baos.toString())
+                .asText()
+                .asString(),
+            Matchers.equalTo("101")
         );
     }
 
     @Test
-    void visitsSimpleWhileStatement() {
+    void visitsSimpleWhileStatement() throws Exception {
         this.injectAtomAndBaos(0);
         this.visitor.visit(
             MilanVisitorTest.parserFromSource("simple_while.mil").whileStmt()
         );
         MatcherAssert.assertThat(
             "Outputs 5 times",
-            this.baos.toString(),
-            Matchers.equalTo("0\n1\n2\n3\n4\n")
+            new UnixizedOf(this.baos.toString())
+                .asText()
+                .asString(),
+            Matchers.equalTo("0\n1\n2\n3\n4")
         );
     }
 
     @Test
-    void visitsNotSimpleWhileStatement() {
+    void visitsNotSimpleWhileStatement() throws Exception {
         this.injectAtomAndBaos(0);
         this.visitor.visit(
             MilanVisitorTest.parserFromSource("not_simple_while.mil").whileStmt()
         );
         MatcherAssert.assertThat(
             "Outputs 15 times",
-            this.baos.toString(),
+            new UnixizedOf(this.baos.toString())
+                .asText()
+                .asString(),
             Matchers.equalTo(
-                "1\n2\n2\n3\n3\n3\n4\n4\n4\n4\n5\n5\n5\n5\n5\n"
+                "1\n2\n2\n3\n3\n3\n4\n4\n4\n4\n5\n5\n5\n5\n5"
             )
         );
     }
