@@ -104,7 +104,6 @@ public final class MilanInterpreter {
     private void formatIfParseCancelled(
         final ParseCancellationException ex
     ) {
-        System.out.println(ex.getMessage());
         if (ex.getCause() instanceof InputMismatchException cause) {
             final Token off = cause.getOffendingToken();
             this.stderr.println(
