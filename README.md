@@ -16,41 +16,46 @@ Current version of language – **JVM** based.
 | **Terminals**        | **Values**                                                                    |
 |----------------------|-------------------------------------------------------------------------------|
 | Keywords             | `BEGIN` `DO` `ELSE` `END` `ENDDO` `ENDIF` `IF` `OUTPUT` `READ` `THEN` `WHILE` |
-| Operands             | `+` `++` `-` `*` `/` `=` `>` `<` `<=` `>=` `<>`                               |
+| Operands             | `+` `-` `*` `/` `=` `>` `<` `<=` `>=` `<>`                                    |
 | Numbers              | `[0-9]`                                                                       |
 | Letters              | `[a-zA-Z]`                                                                    |
 | Assignment character | `:=`                                                                          |
 | Separator            | `;`                                                                           |
-| Comments             | `//`                                                                          |
 | Construction         | `(` `)`                                                                       |
-
-## Demo
-
-![demo](https://user-images.githubusercontent.com/46355873/228844342-2179df20-9dd1-4354-a392-fbdfd29c9c03.gif)
 
 ## Progress
 
 Current version of Milan grammar supports expressions like:
 ```pascal
 BEGIN
-    next := 1;
-    rng := (1 + (2 * (3)));
-    READ(c1);
-    c2 := c1;
-    WHILE next == 1 DO
-        c1 := c1 / (10 + 2);
-        WHILE c1 == 2 DO
-            IF c1 == 0 THEN
-                next := 0;
-            ELSE
-                rng++;
-                OUTPUT(rng);
-            ENDIF
-        ENDDO
-    ENDDO
-    IF a < b THEN
-        A := 10;
-    ENDIF
-    OUTPUT(rng);
+    a1 := 1;
+    WHILE a1 < 10 DO
+        b1 := (a1 / 2) * 2;
+        OUTPUT(b1);
+        IF a1 == 9 THEN
+            WHILE b1 <> 1 DO
+                OUTPUT(b1);
+                b1 := b1 - 1;
+            ENDDO;
+        ENDIF;
+        a1 := a1 + 1;
+    ENDDO;
+    OUTPUT(a1);
+    OUTPUT(b1);
+    c101 := (a1 - 30) * (b1 + 2);
+    OUTPUT(c101);
+    OUTPUT(65433214);
 END
 ```
+## How to Contribute
+
+Fork repository, make changes, send us a [pull request](https://www.yegor256.com/2014/04/15/github-guidelines.html).
+We will review your changes and apply them to the `master` branch shortly,
+provided they don't violate our quality standards. To avoid frustration,
+before sending us your pull request please run full Maven build:
+
+```bash
+$ mvn clean install
+```
+
+You will need Maven 3.3+ and Java 17+.
