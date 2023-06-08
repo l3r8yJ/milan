@@ -14,6 +14,7 @@ import org.cactoos.list.ListOf;
 import org.cactoos.text.Joined;
 import org.cactoos.text.Split;
 import org.cactoos.text.TextOf;
+import ru.l3r8y.UnixizedOf;
 import ru.milan.interpreter.exception.InterpretationException;
 import ru.milan.interpreter.message.FormattedErrorMessage;
 
@@ -46,10 +47,10 @@ public final class MilanInterpreter {
      * It reads the input file,
      * creates a lexer and a interpreter, and executes the interpreter
      */
-    public void run() throws IOException {
+    public void run() throws Exception {
         final List<Text> lines = this.lines();
         final ANTLRErrorListener errors = new MilanErrorListener(lines);
-        final ProgramLexer lexer = new MilanLexer(this.unixize());
+        final ProgramLexer lexer = new MilanLexer(new UnixizedOf(this.input).asText());
         lexer.removeErrorListeners();
         lexer.addErrorListener(errors);
         final ProgramParser parser = new ProgramParser(
@@ -115,16 +116,6 @@ public final class MilanInterpreter {
                 ).asString()
             );
         }
-    }
-
-    /**
-     * Normalize input to UNIX format.
-     * Ensure EOL at EOF.
-     *
-     * @return UNIX formatted text.
-     */
-    private Text unixize() {
-        return new Joined(new TextOf("\n"), this.lines());
     }
 
     /**
