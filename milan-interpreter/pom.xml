@@ -52,6 +52,10 @@ SOFTWARE.
       <artifactId>cactoos</artifactId>
     </dependency>
     <dependency>
+      <groupId>ru.l3r8y</groupId>
+      <artifactId>unixized</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
     </dependency>
