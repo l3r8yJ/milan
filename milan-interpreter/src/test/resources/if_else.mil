@@ -2,4 +2,4 @@ IF A > 41 THEN
     OUTPUT(A);
 ELSE
     OUTPUT(101);
-ENDIF
+ENDIF;

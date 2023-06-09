@@ -12,7 +12,7 @@ whileStmt: WHILE expressions DO block ENDDO SEMICOLON;
 
 ifStmt: IF expressions THEN block (elseStmt)? ENDIF SEMICOLON;
 
-outputStmt: OUTPUT LBRACKET expressions RBRACKET;
+outputStmt: OUTPUT LBRACKET expressions RBRACKET SEMICOLON;
 
 elseStmt: ELSE block;
 
