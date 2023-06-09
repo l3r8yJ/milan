@@ -2,15 +2,15 @@ grammar Program;
 
 prog: BEGIN block END;
 
-block: (stmt SEMICOLON)*;
+block: stmt*;
 
 stmt: assignStmt | whileStmt | ifStmt | outputStmt;
 
-assignStmt: ID ASSIGN expressions;
+assignStmt: ID ASSIGN expressions SEMICOLON;
 
-whileStmt: WHILE expressions DO block ENDDO;
+whileStmt: WHILE expressions DO block ENDDO SEMICOLON;
 
-ifStmt: IF expressions THEN block (elseStmt)? ENDIF;
+ifStmt: IF expressions THEN block (elseStmt)? ENDIF SEMICOLON;
 
 outputStmt: OUTPUT LBRACKET expressions RBRACKET;
 
