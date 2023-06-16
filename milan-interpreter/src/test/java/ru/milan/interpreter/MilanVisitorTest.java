@@ -252,7 +252,7 @@ final class MilanVisitorTest {
             Matchers.equalTo(Value.TRUE)
         );
         final RuleContext lessEqualsContext =
-            MilanVisitorTest.contextFromString("5 <= A");
+            MilanVisitorTest.contextFromString("4 <= A");
         MatcherAssert.assertThat(
             "5 <= 10 is true",
             this.visitor.visit(lessEqualsContext),
