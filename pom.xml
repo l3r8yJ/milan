@@ -40,7 +40,7 @@ SOFTWARE.
     <hamcrest.version>2.2</hamcrest.version>
     <mockito-core.version>5.2.0</mockito-core.version>
     <junit-pioneer.version>2.0.1</junit-pioneer.version>
-    <picocli.version>4.7.1</picocli.version>
+    <picocli.version>4.7.5</picocli.version>
     <unixized.version>1.0.0</unixized.version>
   </properties>
   <packaging>pom</packaging>
