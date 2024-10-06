@@ -35,7 +35,7 @@ SOFTWARE.
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <junit.version>5.9.2</junit.version>
     <cactoos.version>0.55.0</cactoos.version>
-    <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>3.5.1</maven-surefire-plugin.version>
     <milan-interpreter.version>1.0-SNAPSHOT</milan-interpreter.version>
   </properties>
   <dependencies>
