@@ -38,7 +38,7 @@ SOFTWARE.
     <cactoos.version>0.55.0</cactoos.version>
     <antlr4.version>4.13.0</antlr4.version>
     <hamcrest.version>2.2</hamcrest.version>
-    <mockito-core.version>5.2.0</mockito-core.version>
+    <mockito-core.version>5.14.2</mockito-core.version>
     <junit-pioneer.version>2.0.1</junit-pioneer.version>
     <picocli.version>4.7.5</picocli.version>
     <unixized.version>1.0.0</unixized.version>
