@@ -33,7 +33,7 @@ SOFTWARE.
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <antlr4-maven-plugin.version>${antlr4.version}</antlr4-maven-plugin.version>
     <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
-    <maven-invoker-plugin.version>3.4.0</maven-invoker-plugin.version>
+    <maven-invoker-plugin.version>3.8.1</maven-invoker-plugin.version>
     <lombok.version>1.18.26</lombok.version>
     <cactoos.version>0.55.0</cactoos.version>
     <antlr4.version>4.13.0</antlr4.version>
